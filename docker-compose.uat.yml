@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  web:  
+    image: ygdigitalvault.azurecr.io/digitalvault:latest
+    ports:
+      - "3000:3000"
+    restart: always
+
+  cache:
+     image: bitnami/redis:7.2.4
+     environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+     restart: always
+
+  jobs:  
+    image: ygdigitalvault.azurecr.io/digitalvault:latest
+    environment:
+      - RUN_SCHEDULER=true
+      - APPLICATION_NAME=Jobs
+    ports:
+      - "3001:3000"
+    restart: always
