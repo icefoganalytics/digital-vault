@@ -1,7 +1,7 @@
 # Stage 0 - base node customizations
-FROM node:20.10.0-alpine3.19 AS base-node
+FROM node:20.18.0-alpine3.19 AS base-node
 
-RUN npm install -g npm@10.2.5
+RUN npm install -g npm@10.9.0
 
 # Stage 1 - api build - requires development environment because typescript
 FROM base-node AS api-build-stage

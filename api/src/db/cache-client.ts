@@ -1,4 +1,4 @@
-import { AZURE_REDIS_CONNECTION } from "@/config"
+import { REDIS_CONNECTION_URL } from "@/config"
 import { logger } from "@/utils/logger"
 import { RedisClientType, createClient } from "@redis/client"
 
@@ -7,8 +7,8 @@ class CacheClient {
   protected failures: number = 0
 
   constructor() {
-    logger.info(`INIT CACHE: ${AZURE_REDIS_CONNECTION}`)
-    this.client = createClient({ url: AZURE_REDIS_CONNECTION })
+    logger.info(`INIT CACHE: ${REDIS_CONNECTION_URL}`)
+    this.client = createClient({ url: REDIS_CONNECTION_URL })
 
     this.client.on("error", (err) => {
       this.onError(err)
@@ -19,7 +19,7 @@ class CacheClient {
     })
   }
 
-  onError(err: any) {
+  onError(err: unknown) {
     if (this.failures < 5) {
       this.failures++
       logger.error(`Redis Connection Error ${this.failures}: ${err.message}`)

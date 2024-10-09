@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  web:  
-    image: ygdigitalvault.azurecr.io/digitalvault:latest
+  web:
+    image: yg-digital-vault.azurecr.io/digital-vault:latest
     ports:
       - "3000:3000"
     restart: always
@@ -13,8 +13,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
      restart: always
 
-  jobs:  
-    image: ygdigitalvault.azurecr.io/digitalvault:latest
+  jobs:
+    image: yg-digital-vault.azurecr.io/digital-vault:latest
     environment:
       - RUN_SCHEDULER=true
       - APPLICATION_NAME=Jobs

@@ -1,28 +1,27 @@
 {
-  "name": "digitalvault-api",
+  "name": "digital-vault-api",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Digital Vault Backend",
   "main": "src/server.js",
   "scripts": {
     "build": "tsc && tsc-alias",
     "clean": "rm -rf ./dist",
     "start": "ts-node-dev -r tsconfig-paths/register src/server.ts",
+    "start:scheduler": "ts-node-dev -r tsconfig-paths/register src/scheduler.ts",
     "ts-node": "ts-node -r tsconfig-paths/register --logError",
     "knex": "ts-node -r tsconfig-paths/register ./node_modules/.bin/knex --knexfile src/config.d/knexfile.ts",
     "initializers": "ts-node -r tsconfig-paths/register --files src/initializers/index.ts",
     "test": "vitest",
     "lint": "eslint . --ext .js,.ts --ignore-path ../.gitignore",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc -p tests/tsconfig.json --noEmit"
   },
-  "author": "Michael Johnson",
+  "author": "Marlen Brunner",
   "license": "ISC",
   "dependencies": {
-    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@sequelize/core": "^7.0.0-alpha.40",
     "@sequelize/mssql": "^7.0.0-alpha.40",
     "axios": "^1.7.3",
-    "camelcase-keys": "^7.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

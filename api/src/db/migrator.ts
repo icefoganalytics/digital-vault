@@ -2,7 +2,7 @@ import express, { Request, Response } from "express"
 import { join } from "path"
 
 import { NODE_ENV } from "@/config"
-import dbLegacy from "@/db/db-client-legacy"
+import dbMigrationClient from "@/db/db-migration-client"
 import { logger } from "@/utils/logger"
 
 export class Migrator {
@@ -44,27 +44,27 @@ export class Migrator {
   }
 
   listMigrations() {
-    return dbLegacy.migrate.list({ directory: join(__dirname, "migrations") })
+    return dbMigrationClient.migrate.list({ directory: join(__dirname, "migrations") })
   }
 
   async migrateUp() {
     logger.warn("-------- MIGRATE UP ---------")
-    return dbLegacy.migrate.up({ directory: join(__dirname, "migrations") })
+    return dbMigrationClient.migrate.up({ directory: join(__dirname, "migrations") })
   }
 
   async migrateDown() {
     logger.warn("-------- MIGRATE DOWN ---------")
-    return dbLegacy.migrate.down({ directory: join(__dirname, "migrations") })
+    return dbMigrationClient.migrate.down({ directory: join(__dirname, "migrations") })
   }
 
   async migrateLatest() {
     logger.warn("-------- MIGRATE LATEST ---------")
-    return dbLegacy.migrate.latest({ directory: join(__dirname, "migrations") })
+    return dbMigrationClient.migrate.latest({ directory: join(__dirname, "migrations") })
   }
 
   async seedUp(environment?: string) {
     logger.warn("-------- SEED UP ---------")
-    return dbLegacy.seed.run({ directory: join(__dirname, "seeds", environment || NODE_ENV) })
+    return dbMigrationClient.seed.run({ directory: join(__dirname, "seeds", environment || NODE_ENV) })
   }
 }
 const migrator = new Migrator()

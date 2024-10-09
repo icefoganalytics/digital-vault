@@ -28,8 +28,8 @@ import { useRoute, useRouter } from "vue-router"
 
 import useCurrentUser from "@/use/use-current-user"
 
-import PageLoader from "@/components/PageLoader.vue"
-import AppSnackbar from "@/components/AppSnackbar.vue"
+import PageLoader from "@/components/common/PageLoader.vue"
+import AppSnackbar from "@/components/common/AppSnackbar.vue"
 
 const route = useRoute()
 const isUnauthenticatedRoute = computed(() => route.meta.requiresAuth === false)

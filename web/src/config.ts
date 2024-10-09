@@ -7,7 +7,7 @@ const prodConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "generic-production",
   apiBaseUrl: "",
-  applicationName: "Vault",
+  applicationName: "Digital Vault",
 }
 
 const uatConfig = {
@@ -15,7 +15,7 @@ const uatConfig = {
   clientId: "11878vWk1pmhwyVQwsr2m2zM3w3e912U",
   audience: "generic-uat",
   apiBaseUrl: "",
-  applicationName: "Vault - UAT",
+  applicationName: "Digital Vault - UAT",
 }
 
 const devConfig = {
@@ -23,7 +23,7 @@ const devConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "testing",
   apiBaseUrl: "http://localhost:3000",
-  applicationName: "Vault - DEV",
+  applicationName: "Digital Vault - DEV",
 }
 
 const localProductionConfig = {
@@ -31,7 +31,7 @@ const localProductionConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "testing",
   apiBaseUrl: "http://localhost:8080",
-  applicationName: "Vault - DEV (production)",
+  applicationName: "Digital Vault - DEV (production)",
 }
 
 let config = prodConfig
@@ -40,7 +40,7 @@ if (ENVIRONMENT === "production" && window.location.host === "localhost:8080") {
   config = localProductionConfig
 } else if (window.location.host === "localhost:8080") {
   config = devConfig
-} else if (window.location.host == "yg-digitalvault.azurewebsites.net") {
+} else if (window.location.host == "yg-wrap-uat.azurewebsites.net") {
   config = uatConfig
 }
 

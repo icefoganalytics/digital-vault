@@ -1,9 +1,9 @@
-import dbLegacy from "@/db/db-client-legacy"
+import dbMigrationClient from "@/db/db-migration-client"
 import { logger } from "@/utils/logger"
 
 export async function isValidConnection() {
   try {
-    await dbLegacy.raw("SELECT GETDATE()")
+    await dbMigrationClient.raw("SELECT GETDATE()")
     logger.info("Connection has been established successfully.")
     return true
   } catch (error) {

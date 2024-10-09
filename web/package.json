@@ -1,7 +1,7 @@
 {
-  "name": "digitalvault-web",
+  "name": "digital-vault-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -14,7 +14,6 @@
   "dependencies": {
     "@auth0/auth0-vue": "^2.3.3",
     "@mdi/font": "^7.4.47",
-    "@tabler/icons-vue": "^2.47.0",
     "@vueuse/router": "^11.0.3",
     "axios": "^1.6.8",
     "lodash": "^4.17.21",
@@ -22,10 +21,8 @@
     "pinia": "^2.1.7",
     "qs": "^6.11.2",
     "vue": "^3.4.21",
-    "vue-draggable-next": "^2.2.1",
+    "vue-i18n": "^10.0.4",
     "vue-router": "^4.3.0",
-    "vue-scrollto": "^2.20.0",
-    "vue3-perfect-scrollbar": "^2.0.0",
     "vuetify": "^3.7.1"
   },
   "devDependencies": {

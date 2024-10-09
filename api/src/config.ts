@@ -33,13 +33,14 @@ export const AUTH0_REDIRECT = process.env.VITE_AUTH0_REDIRECT || process.env.FRO
 
 export const APPLICATION_NAME = process.env.VITE_APPLICATION_NAME || ""
 
-export const AZURE_SQL_HOST = process.env.AZURE_SQL_HOST || ""
-export const AZURE_SQL_USERNAME = process.env.AZURE_SQL_USERNAME || ""
-export const AZURE_SQL_PASSWORD = process.env.AZURE_SQL_PASSWORD || ""
-export const AZURE_SQL_DATABASE = process.env.AZURE_SQL_DATABASE || ""
-export const AZURE_SQL_PORT = parseInt(process.env.AZURE_SQL_PORT || "1433")
-export const AZURE_REDIS_CONNECTION = process.env.AZURE_REDIS_CONNECTION || ""
+export const DB_HOST = process.env.DB_HOST || ""
+export const DB_USERNAME = process.env.DB_USERNAME || ""
+export const DB_PASSWORD = process.env.DB_PASSWORD || ""
+export const DB_DATABASE = process.env.DB_DATABASE || ""
+export const DB_PORT = parseInt(process.env.DB_PORT || "1433")
 export const DB_TRUST_SERVER_CERTIFICATE = process.env.DB_TRUST_SERVER_CERTIFICATE === "true"
+
+export const REDIS_CONNECTION_URL = process.env.REDIS_CONNECTION_URL || ""
 
 export const DB_HEALTH_CHECK_INTERVAL_SECONDS = parseInt(
   process.env.DB_HEALTH_CHECK_INTERVAL_SECONDS || "5"
@@ -57,10 +58,6 @@ export const GIT_COMMIT_HASH = process.env.GIT_COMMIT_HASH || ""
 
 export const RUN_SCHEDULER = process.env.RUN_SCHEDULER || "false"
 
-export const SHARE_POINT_TENANT_ID = process.env.SHARE_POINT_TENANT_ID || ""
-export const SHARE_POINT_CLIENT_ID = process.env.SHARE_POINT_CLIENT_ID || ""
-export const SHARE_POINT_CLIENT_SECRET = process.env.SHARE_POINT_CLIENT_SECRET || ""
-
 export const AD_CLIENT_ID = process.env.AD_CLIENT_ID || ""
 export const AD_CLIENT_SECRET = process.env.AD_CLIENT_SECRET || ""
 export const AD_TENANT_ID = process.env.AD_TENANT_ID || ""
@@ -73,7 +70,7 @@ export const AWS_LOGGING_ACCESS_ID = process.env.AWS_LOGGING_ACCESS_ID || ""
 export const AWS_LOGGING_ACCESS_KEY = process.env.AWS_LOGGING_ACCESS_KEY || ""
 export const DEFAULT_LOG_LEVEL = process.env.DEFAULT_LOG_LEVEL || "debug"
 
-export const MAIL_FROM = process.env.MAIL_FROM || "vault@yukon.ca"
+export const MAIL_FROM = process.env.MAIL_FROM || "digital-vault@yukon.ca"
 export const MAIL_HOST = process.env.MAIL_HOST || "smtp.gov.yk.ca"
 export const MAIL_PORT = parseInt(process.env.MAIL_PORT || "25")
 export const MAIL_SERVICE = process.env.MAIL_SERVICE || "Outlook365"
