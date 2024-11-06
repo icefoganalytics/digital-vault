@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/digital-vault:${{ steps.generate_release_tag.outputs.next_release_tag }} , ${{ env.REGISTRY }}/digital-vault:latest
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.generate_release_tag.outputs.next_release_tag }} , ${{ env.REGISTRY }}/${{ github.repository }}:latest
           build-args: |
             RELEASE_TAG=${{ steps.generate_release_tag.outputs.next_release_tag }}
             GIT_COMMIT_HASH=${{ steps.git_commit_hash.outputs.commit_hash }}
