@@ -10,7 +10,7 @@ export type Breadcrumb = {
 }
 
 const BASE_CRUMB = {
-  title: "Digital Vault",
+  title: "Dashboard",
   disabled: false,
   to: {
     name: "DashboardPage",

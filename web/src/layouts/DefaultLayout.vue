@@ -16,7 +16,11 @@
   </v-app-bar>
 
   <v-main>
-    <SimpleBreadcrumbs />
+    <div style="background-color: #00000011;">
+      <v-container class="py-0">
+        <SimpleBreadcrumbs />
+      </v-container>
+    </div>
 
     <v-container>
       <router-view />

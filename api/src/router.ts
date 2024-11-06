@@ -17,7 +17,14 @@ import migrator from "@/db/migrator"
 
 import { jwtMiddleware, ensureAndAuthorizeCurrentUser } from "@/middlewares"
 
-import { CurrentUserController, UsersController } from "@/controllers"
+import {
+  ArchiveItemsController,
+  CategoriesController,
+  CurrentUserController,
+  RetentionsController,
+  SourcesController,
+  UsersController,
+} from "@/controllers"
 
 export const router = Router()
 
@@ -42,6 +49,37 @@ router
   .get(UsersController.show)
   .patch(UsersController.update)
   .delete(UsersController.destroy)
+
+router.route("/api/sources").get(SourcesController.index).post(SourcesController.create)
+router
+  .route("/api/sources/:id")
+  .get(SourcesController.show)
+  .patch(SourcesController.update)
+  .delete(SourcesController.destroy)
+
+router.route("/api/retentions").get(RetentionsController.index).post(RetentionsController.create)
+router
+  .route("/api/retentions/:id")
+  .get(RetentionsController.show)
+  .patch(RetentionsController.update)
+  .delete(RetentionsController.destroy)
+
+router.route("/api/categories").get(CategoriesController.index).post(CategoriesController.create)
+router
+  .route("/api/categories/:id")
+  .get(CategoriesController.show)
+  .patch(CategoriesController.update)
+  .delete(CategoriesController.destroy)
+
+router
+  .route("/api/archive-items")
+  .get(ArchiveItemsController.index)
+  .post(ArchiveItemsController.create)
+router
+  .route("/api/archive-items/:id")
+  .get(ArchiveItemsController.show)
+  .patch(ArchiveItemsController.update)
+  .delete(ArchiveItemsController.destroy)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {

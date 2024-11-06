@@ -3,3 +3,7 @@
 
 export { type BaseScopeOptions } from "./base-policy"
 export { UsersPolicy } from "./users-policy"
+export { ArchiveItemsPolicy } from "./archive-items-policy"
+export { SourcePolicy } from "./source-policy"
+export { RetentionPolicy } from "./retention-policy"
+export { CategoryPolicy } from "./category-policy"

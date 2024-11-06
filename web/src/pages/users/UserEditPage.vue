@@ -62,16 +62,8 @@ const displayName = computed(() => {
 
 useBreadcrumbs([
   {
-    title: "All Users",
+    title: "Users",
     to: { name: "users/UsersPage" },
-  },
-  {
-    title: "User",
-    to: {
-      // TODO: set to non-edit user page, once it exists
-      name: "users/UserEditPage",
-      params: { userId: props.userId },
-    },
   },
   {
     title: "Edit",

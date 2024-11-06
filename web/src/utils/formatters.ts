@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash"
 import { DateTime } from "luxon"
 
-export function formatDate(input: string | Date | undefined): string {
+export function formatDate(input: string | Date | undefined | null): string {
   if (isEmpty(input)) return ""
   if (typeof input == "string") return DateTime.fromISO(input).toLocal().toFormat("yyyy-MM-dd")
   if (input) return DateTime.fromJSDate(input).toLocal().toFormat("yyyy-MM-dd")
@@ -9,7 +9,7 @@ export function formatDate(input: string | Date | undefined): string {
   return ""
 }
 
-export function formatRelative(input: string | Date | undefined): string {
+export function formatRelative(input: string | Date | undefined | null): string {
   if (isEmpty(input)) return ""
   if (typeof input == "string") return DateTime.fromISO(input).toLocal().toRelative() ?? ""
   if (input) return DateTime.fromJSDate(input).toLocal().toRelative() ?? ""

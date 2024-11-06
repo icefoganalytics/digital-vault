@@ -17,6 +17,9 @@ export const httpClient = axios.create({
       })
     },
   },
+  formSerializer: {
+    indexes: true, // array indexes format null - no brackets, false - empty brackets, true - brackets with indexes
+  },
 })
 
 httpClient.interceptors.request.use(async (config) => {

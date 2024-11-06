@@ -14,8 +14,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string("division", 100)
     table.string("branch", 100)
     table.string("unit", 100)
-
     table.specificType("deactivated_at", "DATETIME2(0)")
+
     table
       .specificType("created_at", "DATETIME2(0)")
       .notNullable()
@@ -25,6 +25,7 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .defaultTo(knex.raw("GETUTCDATE()"))
     table.specificType("deleted_at", "DATETIME2(0)")
+    
     table.unique(["email"], {
       indexName: "users_auth0_subject_unique",
       predicate: knex.whereNull("deleted_at"),

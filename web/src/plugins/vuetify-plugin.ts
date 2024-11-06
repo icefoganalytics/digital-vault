@@ -30,27 +30,39 @@ export default createVuetify({
       variant: "outlined",
       density: "comfortable",
       color: "primary",
-      /* hideDetails: "auto" */
+      hideDetails: "auto",
     },
     VTextarea: {
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      hideDetails: "auto",
     },
     VSelect: {
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      hideDetails: "auto",
     },
     VAutocomplete: {
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      hideDetails: "auto",
     },
     VCombobox: {
       variant: "outlined",
       density: "comfortable",
       color: "primary",
+      hideDetails: "auto",
+    },
+    VFileInput: {
+      variant: "outlined",
+      density: "comfortable",
+      color: "primary",
+      hideDetails: "auto",
+      prependIcon: "",
+      appendInnerIcon: "mdi-paperclip"
     },
     VListItem: {
       minHeight: "45px",
@@ -58,7 +70,7 @@ export default createVuetify({
     VTooltip: {
       location: "top",
     },
-    VSwitch: { color: "primary", density: "comfortable" },
+    VSwitch: { color: "primary", density: "comfortable", hideDetails: "auto" },
     VBtn: { color: "primary" },
   },
 })

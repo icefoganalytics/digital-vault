@@ -19,7 +19,8 @@ class CacheClient {
     })
   }
 
-  onError(err: unknown) {
+  // eslint-disable-next-line
+  onError(err: any) {
     if (this.failures < 5) {
       this.failures++
       logger.error(`Redis Connection Error ${this.failures}: ${err.message}`)
@@ -35,6 +36,7 @@ class CacheClient {
     return this
   }
 
+  // eslint-disable-next-line
   async setValue(key: string, value: any) {
     this.client.set(key, value)
   }

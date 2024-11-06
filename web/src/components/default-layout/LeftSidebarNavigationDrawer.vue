@@ -1,5 +1,8 @@
 <template>
-  <v-navigation-drawer v-model="showDrawer">
+  <v-navigation-drawer
+    v-model="showDrawer"
+    :disable-resize-watcher="false"
+  >
     <v-list v-model:opened="open">
       <v-list-item title="Digital Vault"></v-list-item>
       <v-divider></v-divider>
@@ -8,10 +11,29 @@
         title="Home"
         prepend-icon="mdi-home"
       />
+
+      <v-list-item
+        title="Archive Items"
+        :to="{ name: 'archive-item/ArchiveItemListPage' }"
+        prepend-icon="mdi-clock"
+      />
+
+      <v-list-item
+        title="New Archive Item"
+        :to="{ name: 'archive-item/ArchiveItemNewPage' }"
+        prepend-icon="mdi-clock"
+      />
+
       <v-list-item
         :to="{ name: 'ProfilePage' }"
         :title="username"
         prepend-icon="mdi-account"
+      />
+
+      <v-list-item
+        :to="{ name: 'decisions/DecisionNewPage' }"
+        title="Decision"
+        prepend-icon="mdi-call-split"
       />
 
       <v-list-group
@@ -33,13 +55,23 @@
         />
         <v-list-item
           :to="{ name: 'users/UsersPage' }"
-          title="All Users"
+          title="Users"
           prepend-icon="mdi-account-circle"
         />
         <v-list-item
-          :to="{ name: 'users/UserNewPage' }"
-          title="Add User"
-          prepend-icon="mdi-account-plus"
+          :to="{ name: 'administration/SourceListPage' }"
+          title="Sources"
+          prepend-icon="mdi-account-circle"
+        />
+        <v-list-item
+          :to="{ name: 'administration/RetentionListPage' }"
+          title="Retentions"
+          prepend-icon="mdi-account-circle"
+        />
+        <v-list-item
+          :to="{ name: 'administration/CategoryListPage' }"
+          title="Categories"
+          prepend-icon="mdi-account-circle"
         />
       </v-list-group>
 

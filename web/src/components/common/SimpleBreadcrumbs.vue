@@ -2,6 +2,7 @@
   <v-breadcrumbs
     :items="breadcrumbsWithExactTrueByDefault"
     large
+    class="pl-0"
   >
     <template #divider>
       <v-icon>mdi-chevron-right</v-icon>
