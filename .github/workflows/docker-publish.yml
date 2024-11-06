@@ -20,9 +20,9 @@ jobs:
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.AZURECR_URL }}
-          username: ${{ secrets.AZURECR_USERNAME }}
-          password: ${{ secrets.AZURECR_PASSWORD }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate release tag
         id: generate_release_tag
@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.AZURECR_URL }}/digital-vault:${{ steps.generate_release_tag.outputs.next_release_tag }} , ${{ secrets.AZURECR_URL }}/digital-vault:latest
+          tags: ${{ env.REGISTRY }}/digital-vault:${{ steps.generate_release_tag.outputs.next_release_tag }} , ${{ env.REGISTRY }}/digital-vault:latest
           build-args: |
             RELEASE_TAG=${{ steps.generate_release_tag.outputs.next_release_tag }}
             GIT_COMMIT_HASH=${{ steps.git_commit_hash.outputs.commit_hash }}
