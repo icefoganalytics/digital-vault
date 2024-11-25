@@ -33,6 +33,7 @@ export async function seed(_knex: Knex): Promise<void> {
     retentionName: "Hide",
     tags: ["Finance", "Testing"],
     sourceId: source1.id,
+    isDecision: false,
   })
 
   await ArchiveItemCategory.create({
