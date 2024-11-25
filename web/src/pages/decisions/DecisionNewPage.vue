@@ -3,7 +3,6 @@
     v-if="createItem"
     ref="form"
     v-model="isValid"
-    @submit.prevent="saveWrapper"
   >
     <v-row>
       <v-col
