@@ -154,7 +154,7 @@ const decisionId = computed(() => (props.decisionId ? parseInt(props.decisionId)
 const { item } = useDecision(decisionId)
 
 const categoryText = computed(() => {
-  if (item.value) {
+  if (item.value && item.value.categories && item.value.categories.length > 0) {
     const category = item.value.categories[0].name
     return `${category}`
   }
@@ -162,7 +162,7 @@ const categoryText = computed(() => {
   return ""
 })
 
-useBreadcrumbs("Record a Decision", [
+useBreadcrumbs("Decision Record", [
   BASE_CRUMB,
   { title: "Decisions", to: { name: "decisions/DecisionListPage" } },
 ])
