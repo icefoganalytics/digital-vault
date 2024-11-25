@@ -1,5 +1,6 @@
 // Controllers
 export { ArchiveItemsController } from "./archive-items-controller"
+export { ArchiveItemFilesController } from "./archive-item-files-controller"
 export { CurrentUserController } from "./current-user-controller"
 export { UsersController } from "./users-controller"
 export { SourcesController } from "./sources-controller"

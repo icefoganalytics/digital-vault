@@ -109,7 +109,10 @@
               cols="12"
               md="3"
             >
-              <v-card class="bg-secondary fill-height">
+              <v-card
+                class="bg-secondary fill-height"
+                @click="downloadFile(file)"
+              >
                 <v-card-text>
                   <p>
                     {{ file.originalFileName }}
@@ -150,10 +153,12 @@
 <script setup lang="ts">
 import { computed } from "vue"
 
+import archiveItemsApi from "@/api/archive-items-api"
 import useArchiveItem from "@/use/use-archive-item"
 import { formatDate, formatDateTime } from "@/utils/formatters"
 
 import SecurityLevelSelect from "@/components/archive-item/SecurityLevelSelect.vue"
+import { ArchiveItemFile } from "@/api/archive-items-api"
 
 const props = defineProps<{
   archiveItemId: string
@@ -169,4 +174,16 @@ const categoryNames = computed(() => {
   }
   return []
 })
+
+async function downloadFile(file: ArchiveItemFile) {
+  if (!file.archiveItemId) return
+
+  const result = await archiveItemsApi.download(file.archiveItemId, file.id)
+  const newBlob = new Blob([result])
+  const objUrl = window.URL.createObjectURL(newBlob)
+  const link = document.createElement("a")
+  link.href = objUrl
+  link.download = file.originalFileName || "download"
+  link.click()
+}
 </script>

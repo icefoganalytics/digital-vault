@@ -78,3 +78,6 @@ export const MAIL_SERVICE = process.env.MAIL_SERVICE || "Outlook365"
 // i.e. if the server on the public internet rather than inside the YNet network.
 export const MAIL_USER = process.env.MAIL_USER || ""
 export const MAIL_PASS = process.env.MAIL_PASS || ""
+
+export const BLOB_CONNECTIONSTRING = process.env.BLOB_CONNECTIONSTRING || ""
+export const BLOB_CONTAINER = process.env.BLOB_CONTAINER || ""

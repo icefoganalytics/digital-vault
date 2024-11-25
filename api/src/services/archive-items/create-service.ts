@@ -83,18 +83,26 @@ export class CreateService extends BaseService {
 
       if (!isNil(this.attributes.files)) {
         const service = new FileStorageService()
+        const folderKey = service.makeKey()
 
         for (const file of this.attributes.files) {
+          const fileKey = `${folderKey}/${service.makeKey()}`
           await ArchiveItemFile.create(
             {
               archiveItemId: archiveItem.id,
               originalFileName: file.name,
               originalFileSize: file.size,
               originalMimeType: file.type,
-              originalKey: service.makeKey(),
+              originalKey: fileKey,
             },
             { transaction }
           )
+
+          // eslint-disable-next-line
+          const uploadResp = await service.uploadFile(fileKey, (file as any).path)
+          if (uploadResp.errorCode) {
+            throw Error("File upload error")
+          }
         }
       }
 

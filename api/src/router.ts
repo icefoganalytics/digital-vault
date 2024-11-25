@@ -18,6 +18,7 @@ import migrator from "@/db/migrator"
 import { jwtMiddleware, ensureAndAuthorizeCurrentUser } from "@/middlewares"
 
 import {
+  ArchiveItemFilesController,
   ArchiveItemsController,
   CategoriesController,
   CurrentUserController,
@@ -82,16 +83,15 @@ router
   .get(ArchiveItemsController.show)
   .patch(ArchiveItemsController.update)
   .delete(ArchiveItemsController.destroy)
-  
+
+router.route("/api/archive-items/:archiveItemId/files/:fileId").get(ArchiveItemFilesController.show)
+
+router.route("/api/decisions").get(DecisionsController.index).post(DecisionsController.create)
 router
-.route("/api/decisions")
-.get(DecisionsController.index)
-.post(DecisionsController.create)
-router
-.route("/api/decisions/:id")
-.get(DecisionsController.show)
-.patch(DecisionsController.update)
-.delete(DecisionsController.destroy)
+  .route("/api/decisions/:id")
+  .get(DecisionsController.show)
+  .patch(DecisionsController.update)
+  .delete(DecisionsController.destroy)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {

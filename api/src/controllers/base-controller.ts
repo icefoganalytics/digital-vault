@@ -122,7 +122,7 @@ export class BaseController<TModel extends Model = never> {
   }
 
   buildCacheKey(): string {
-    const key = `${this.request.headers.authorization}_${this.request.path}`
+    const key = `${this.request.headers.authorization}_${this.request.originalUrl}`
     return `${this.cachePrefix}${createHash("sha256").update(key).digest("hex")}`
   }
 

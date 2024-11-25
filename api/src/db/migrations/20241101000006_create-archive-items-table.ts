@@ -11,6 +11,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string("expire_action", 255).notNullable()
     table.integer("source_id").nullable().references("id").inTable("sources")
     table.integer("user_id").nullable().references("id").inTable("users")
+    // capture more user info (name, title, email, auth0Subject)
+    // permalink (similar to WRAP slug - UUID / maybe include source/type)
     table.string("title", 2000).notNullable()
     table.text("description").nullable()
     table.text("summary").nullable()

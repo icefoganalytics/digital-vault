@@ -124,6 +124,13 @@ export const archiveItemsApi = {
     const { data } = await http.delete(`/api/archive-items/${archiveItemId}`)
     return data
   },
+
+  async download(archiveItemId: number, fileId: number) {
+    const { data } = await http.get(`/api/archive-items/${archiveItemId}/files/${fileId}`, {
+      responseType: "blob",
+    })
+    return data
+  },
 }
 
 export default archiveItemsApi
