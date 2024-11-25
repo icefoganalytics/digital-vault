@@ -24,7 +24,6 @@ export class CreateService extends BaseService {
       calculatedExpireDate,
       expireAction,
       securityLevel,
-      tags,
       ...optionalAttributes
     } = this.attributes
 
@@ -57,12 +56,14 @@ export class CreateService extends BaseService {
       const archiveItem = await ArchiveItem.create(
         {
           ...optionalAttributes,
+          isDecision: false,
           title,
           retentionName,
           calculatedExpireDate,
           expireAction,
           status,
           securityLevel,
+          userId: this.attributes.currentUser?.id,
         },
         { transaction }
       )

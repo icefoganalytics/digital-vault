@@ -2,6 +2,7 @@
   <v-btn
     v-if="isSystemAdmin"
     :to="{ name: 'administration/RetentionNewPage' }"
+    style="height: 40px"
     >New Retention</v-btn
   >
 </template>

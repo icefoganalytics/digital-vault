@@ -9,6 +9,7 @@ import {
 import {
   Attribute,
   AutoIncrement,
+  BelongsTo,
   BelongsToMany,
   Default,
   HasMany,
@@ -22,6 +23,7 @@ import BaseModel from "@/models/base-model"
 import ArchiveItemFile from "@/models/archive-item-file"
 import Category from "./category"
 import ArchiveItemCategory from "./archive-item-category"
+import User from "./user"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum SecurityLevel {
@@ -52,6 +54,13 @@ export class ArchiveItem extends BaseModel<
   @Attribute(DataTypes.STRING(255))
   @NotNull
   declare retentionName: string
+
+  @Attribute(DataTypes.BOOLEAN)
+  @NotNull
+  declare isDecision: boolean
+
+  @Attribute(DataTypes.STRING(255))
+  declare decisionText: string | null
 
   @Attribute(DataTypes.DATE(0))
   @NotNull
@@ -102,15 +111,20 @@ export class ArchiveItem extends BaseModel<
 
   @Attribute({
     type: DataTypes.STRING(255),
-    get() {
+    get(): string[] | null {
       const tags = this.getDataValue("tags")
       if (isNil(tags) || isEmpty(tags)) {
         return []
       }
       return tags.split(",")
     },
-    set(value: string[]) {
-      this.setDataValue("tags", value.filter((v) => !isEmpty(v.trim())).join(","))
+    set(value: string[] | null) {
+      if (value === null) {
+        this.setDataValue("tags", null)
+        return
+      }
+      const values = value.join(",")
+      this.setDataValue("tags", values)
     },
   })
   declare tags: string[] | null
@@ -147,9 +161,20 @@ export class ArchiveItem extends BaseModel<
   })
   declare categories?: NonAttribute<Category[]>
 
+  @BelongsTo(() => User, {
+    foreignKey: "userId",
+    /* inverse: {
+      as: "decisions",
+      type: "hasMany",
+    }, */
+  })
+  declare user?: NonAttribute<User>
+
   // Scopes
   static establishScopes(): void {
     this.addSearchScope(["title", "tags"])
+    this.addScope("DecisionsOnly", { where: { isDecision: true } })
+    this.addScope("ArchiveItemsOnly", { where: { isDecision: false } })
   }
 }
 

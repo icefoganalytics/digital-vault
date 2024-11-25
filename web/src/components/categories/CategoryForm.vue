@@ -4,49 +4,63 @@
     v-model="isValid"
     @submit.prevent="saveWrapper"
   >
-    <v-row
-      v-if="item"
-      class="mb-3"
-    >
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.name"
-          :rules="[rules.required]"
-          label="Name"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <RetentionSelect
-          v-model="item.retentionId"
-          :rules="[rules.required]"
-          label="Retention"
-        />
-      </v-col>
+    <v-card>
+      <v-card-title>Category Details</v-card-title>
+      <v-card-text>
+        <v-row
+          v-if="item"
+          class="mb-3"
+        >
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.name"
+              :rules="[rules.required]"
+              label="Name"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <RetentionSelect
+              v-model="item.retentionId"
+              :rules="[rules.required]"
+              label="Retention"
+            />
+          </v-col>
 
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-textarea
-          v-model="item.description"
-          label="Description"
-          rows="3"
-        />
-      </v-col>
-    </v-row>
+          <v-col
+            cols="12"
+            md="12"
+          >
+            <v-textarea
+              v-model="item.description"
+              label="Description"
+              rows="3"
+            />
+          </v-col>
+        </v-row>
 
-    <v-btn
-      :disabled="!isValid"
-      :loading="isLoading"
-      type="submit"
-      >Save</v-btn
-    >
+        <div class="d-flex">
+          <v-btn
+            :disabled="!isValid"
+            :loading="isLoading"
+            type="submit"
+            >Save</v-btn
+          >
+          <v-spacer />
+          <v-btn
+            color="secondary"
+            variant="outlined"
+            :to="{ name: 'administration/CategoryListPage' }"
+            >Cancel</v-btn
+          >
+        </div>
+      </v-card-text>
+    </v-card>
   </v-form>
 </template>
 

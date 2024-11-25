@@ -3,6 +3,8 @@ import type { Knex } from "knex"
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable("archive_items", function (table) {
     table.increments("id").notNullable().primary()
+    table.boolean("is_decision").notNullable().defaultTo(false)
+    table.string("decision_text", 255).nullable()
     table.string("retention_name", 255).notNullable()
     table.specificType("calculated_expire_date", "DATETIME2(0)").notNullable()
     table.specificType("override_expire_date", "DATETIME2(0)").nullable()
@@ -32,6 +34,7 @@ export async function up(knex: Knex): Promise<void> {
 
     table.index(["title"], "archive_items_title")
     table.index(["status"], "archive_items_status")
+    table.index(["is_decision"], "archive_items_is_decision")
     table.index(["calculated_expire_date"], "archive_items_calculated_expire_date")
     table.index(["override_expire_date"], "archive_items_override_expire_date")
   })

@@ -1,36 +1,47 @@
 <template>
-  <CategoryNewButton />
-  <v-text-field v-model="search" />
+  <v-card>
+    <v-card-text>
+      <div class="d-flex">
+        <v-text-field
+          v-model="search"
+          class="mb-4 mr-5"
+          label="Search"
+          density="compact"
+        />
+        <CategoryNewButton />
+      </div>
 
-  <v-data-table-server
-    v-model:items-per-page="perPage"
-    :search="search"
-    :items="items"
-    :items-length="totalCount"
-    :page="page"
-    :loading="isLoading"
-    :headers="headers"
-    @update:options="loadItems"
-    @click:row="openItem"
-  ></v-data-table-server>
+      <v-data-table-server
+        v-model:items-per-page="perPage"
+        :search="search"
+        :items="items"
+        :items-length="totalCount"
+        :page="page"
+        :loading="isLoading"
+        :headers="headers"
+        @update:options="loadItems"
+        @click:row="openItem"
+      ></v-data-table-server>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { useRouter } from "vue-router";
+import { useRouter } from "vue-router"
 import { useRouteQuery } from "@vueuse/router"
 
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import useCategories from "@/use/use-categories"
-import { Category } from "@/api/categories-api";
+import { Category } from "@/api/categories-api"
 
-import CategoryNewButton from "@/components/categories/CategoryNewButton.vue";
+import CategoryNewButton from "@/components/categories/CategoryNewButton.vue"
 
 const router = useRouter()
 const { isLoading, items, totalCount, list } = useCategories()
 
 onMounted(async () => {
-  await loadItems()
+  if (!isLoading.value) await loadItems()
 })
 
 const search = ref()
@@ -42,14 +53,7 @@ const headers = [
   { title: "Description", value: "description" },
 ]
 
-useBreadcrumbs([
-  {
-    title: "Categories",
-    to: {
-      name: "administration/CategoryListPage",
-    },
-  },
-])
+useBreadcrumbs("Categories", [ADMIN_CRUMB])
 
 async function loadItems() {
   list({ filters: { search: search.value }, page: page.value, perPage: perPage.value })

@@ -1,5 +1,6 @@
 import http from "@/api/http-client"
 import { type Policy } from "@/api/base-api"
+import { Retention } from "./retentions-api"
 
 /** Keep in sync with api/src/models/categories.ts */
 
@@ -12,7 +13,7 @@ export type Category = {
   updatedAt: string
 
   // Associations
-  // add as needed
+  retention: Retention | null
 }
 
 export type CategoryWhereOptions = {

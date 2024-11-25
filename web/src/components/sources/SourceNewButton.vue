@@ -2,6 +2,7 @@
   <v-btn
     v-if="isSystemAdmin"
     :to="{ name: 'administration/SourceNewPage' }"
+    style="height: 40px"
     >New Source</v-btn
   >
 </template>

@@ -10,21 +10,8 @@
         <v-btn
           color="primary"
           variant="outlined"
-          @click="goBack"
-          >Back</v-btn
-        >
-      </v-col>
-      <v-spacer />
-    </v-row>
-    <v-row>
-      <v-spacer />
-      <v-col>
-        <!-- href="/" performs a more aggressive refresh than using to="xxx" -->
-        <v-btn
-          color="primary"
-          variant="outlined"
           href="/"
-          >Reboot App</v-btn
+          >Back</v-btn
         >
       </v-col>
       <v-spacer />
@@ -58,10 +45,6 @@ const { logout } = useAuth0()
 const { reset: resetCurrentUser } = useCurrentUser()
 
 const { releaseTag, gitCommitHash } = useStatus()
-
-function goBack() {
-  window.history.back()
-}
 
 async function signOut() {
   resetCurrentUser()

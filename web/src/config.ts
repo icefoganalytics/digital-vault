@@ -7,7 +7,7 @@ const prodConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "generic-production",
   apiBaseUrl: "",
-  applicationName: "Digital Vault",
+  applicationName: "The Vault",
 }
 
 const uatConfig = {
@@ -15,7 +15,7 @@ const uatConfig = {
   clientId: "11878vWk1pmhwyVQwsr2m2zM3w3e912U",
   audience: "generic-uat",
   apiBaseUrl: "",
-  applicationName: "Digital Vault - UAT",
+  applicationName: "The Vault - UAT",
 }
 
 const devConfig = {
@@ -23,7 +23,7 @@ const devConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "testing",
   apiBaseUrl: "http://localhost:3000",
-  applicationName: "Digital Vault - DEV",
+  applicationName: "The Vault",
 }
 
 const localProductionConfig = {
@@ -31,7 +31,7 @@ const localProductionConfig = {
   clientId: "mNqPwPZ5M1VXkEH6e8OgEaxmmWfxecwo",
   audience: "testing",
   apiBaseUrl: "http://localhost:8080",
-  applicationName: "Digital Vault - DEV (production)",
+  applicationName: "The Vault",
 }
 
 let config = prodConfig

@@ -15,7 +15,10 @@
         <h1>Drop Files Here</h1>
       </div>
     </div>
-    <slot name="default"></slot>
+
+    <div :style="{ opacity: active ? '0.05' : '1' }">
+      <slot name="default"></slot>
+    </div>
   </div>
 </template>
 
@@ -62,6 +65,6 @@ onUnmounted(() => {
 
 <style scoped>
 div.active {
-  background-color: #00ff0033 !important;
+  background-color: #00ff0011 !important;
 }
 </style>

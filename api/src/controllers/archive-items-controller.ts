@@ -1,5 +1,5 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
+import { ArchiveItem, ArchiveItemFile, Category, User } from "@/models"
 import { ArchiveItemsPolicy } from "@/policies"
 import { IndexSerializer } from "@/serializers/archive-items"
 import BaseController from "@/controllers/base-controller"
@@ -10,7 +10,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
   async index() {
     try {
       const where = this.buildWhere()
-      const scopes = this.buildFilterScopes()
+      const scopes = this.buildFilterScopes(["ArchiveItemsOnly"])
       const scopedItems = ArchiveItemsPolicy.applyScope(scopes, this.currentUser)
 
       const totalCount = await scopedItems.count({ where })
@@ -86,7 +86,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
 
   private async loadArchiveItem() {
     return ArchiveItem.findByPk(this.params.id, {
-      include: [{ model: Category }, { model: ArchiveItemFile }],
+      include: [{ model: Category }, { model: ArchiveItemFile }, { model: User }],
     })
   }
 

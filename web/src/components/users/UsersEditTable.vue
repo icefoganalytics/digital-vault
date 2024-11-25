@@ -1,27 +1,33 @@
 <template>
+  <div class="d-flex">
+    <v-text-field
+      v-model="search"
+      class="mb-4 mr-5"
+      label="Search"
+      density="compact"
+    />
+    <v-btn
+      color="primary"
+      :to="{ name: 'users/UserNewPage' }"
+      style="height: 40px"
+    >
+      New User
+    </v-btn>
+  </div>
+
   <v-data-table-server
     v-model:items-per-page="perPage"
+    :search="search"
     :page="page"
     :headers="headers"
     :items="users"
     :items-length="totalCount"
     :loading="isLoading"
-    class="elevation-1"
-    @dblclick:row="(_event: unknown, { item }: UserTableRow) => goToUserEdit(item.id)"
     @update:page="updatePage"
+    @click:row="(_event: unknown, { item }: UserTableRow) => goToUserEdit(item.id)"
   >
     <template #item.actions="{ item }">
       <div class="d-flex justify-end align-center">
-        <v-btn
-          color="primary"
-          variant="outlined"
-          :to="{
-            name: 'users/UserEditPage',
-            params: { userId: item.id },
-          }"
-        >
-          Edit
-        </v-btn>
         <v-btn
           :loading="isDeleting"
           title="Delete"
@@ -52,6 +58,8 @@ type UserTableRow = {
 }
 
 const { t } = useI18n()
+
+const search = ref()
 
 const headers = ref([
   { title: "Display Name", key: "displayName" },

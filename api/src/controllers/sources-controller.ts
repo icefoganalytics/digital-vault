@@ -8,6 +8,11 @@ import { IndexSerializer } from "@/serializers/sources"
 import BaseController from "@/controllers/base-controller"
 
 export class SourcesController extends BaseController<Source> {
+  cacheIndex = true
+  cacheShow = true
+  cacheDuration = 90
+  cachePrefix = "sources-"
+
   async index() {
     try {
       const where = this.buildWhere()
@@ -21,7 +26,7 @@ export class SourcesController extends BaseController<Source> {
         offset: this.pagination.offset,
       })
       const serializedSources = IndexSerializer.perform(sources)
-      return this.response.json({
+      return this.cacheAndSendJson({
         sources: serializedSources,
         totalCount,
       })
@@ -49,7 +54,7 @@ export class SourcesController extends BaseController<Source> {
         })
       }
 
-      return this.response.json({ source, policy })
+      return this.cacheAndSendJson({ source, policy })
     } catch (error) {
       logger.error("Error fetching source" + error)
       return this.response.status(400).json({

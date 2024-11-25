@@ -3,148 +3,153 @@
     ref="form"
     @submit.prevent="saveWrapper"
   >
-    <v-row>
-      <v-col cols="12">
-        <v-text-field
-          v-model="userAttributes.email"
-          label="Email *"
-          :rules="[required]"
-          variant="outlined"
-          required
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.firstName"
-          label="First name *"
-          :rules="[required]"
-          variant="outlined"
-          required
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.lastName"
-          label="Last name *"
-          :rules="[required]"
-          variant="outlined"
-          required
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.displayName"
-          label="Display Name"
-          variant="outlined"
-          required
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.title"
-          label="Title"
-          variant="outlined"
-        />
-      </v-col>
-    </v-row>
+    <v-card>
+      <v-card-title>User Details</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="userAttributes.email"
+              label="Email *"
+              :rules="[required]"
+              variant="outlined"
+              required
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.firstName"
+              label="First name *"
+              :rules="[required]"
+              variant="outlined"
+              required
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.lastName"
+              label="Last name *"
+              :rules="[required]"
+              variant="outlined"
+              required
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.displayName"
+              label="Display Name"
+              variant="outlined"
+              required
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.title"
+              label="Title"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+      </v-card-text>
 
-    <v-divider class="mb-6"></v-divider>
+      <v-card-title>Organizational Details</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.department"
+              label="Department"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.division"
+              label="Division"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.branch"
+              label="Branch"
+              variant="outlined"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="userAttributes.unit"
+              label="Unit"
+              variant="outlined"
+            />
+          </v-col>
+        </v-row>
+      </v-card-text>
 
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.department"
-          label="Department"
-          variant="outlined"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.division"
-          label="Division"
-          variant="outlined"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.branch"
-          label="Branch"
-          variant="outlined"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="userAttributes.unit"
-          label="Unit"
-          variant="outlined"
-        />
-      </v-col>
-    </v-row>
-
-    <v-divider class="my-6"></v-divider>
-
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <h3>Roles</h3>
-
-        <UserRolesSelect
-          v-model="userAttributes.roles"
-          label="Roles *"
-          :rules="[required]"
-          class="mt-6"
-          variant="outlined"
-          required
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-spacer />
-      <v-col class="d-flex justify-end">
-        <v-btn
-          :loading="isLoading"
-          color="error"
-          variant="outlined"
-          :to="{ name: 'users/UsersPage' }"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          class="ml-3"
-          :loading="isLoading"
-          type="submit"
-          color="success"
-        >
-          Create
-        </v-btn>
-      </v-col>
-    </v-row>
+      <v-card-title>Roles</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <UserRolesSelect
+              v-model="userAttributes.roles"
+              label="Roles *"
+              :rules="[required]"
+              class="mt-6"
+              variant="outlined"
+              required
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex justify-end">
+            <v-btn
+              :loading="isLoading"
+              color="secondary"
+              variant="outlined"
+              :to="{ name: 'users/UsersPage' }"
+            >
+              Cancel
+            </v-btn>
+            <v-spacer />
+            <v-btn
+              class="ml-3"
+              :loading="isLoading"
+              type="submit"
+              color="primary"
+            >
+              Create
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
   </v-form>
 </template>
 

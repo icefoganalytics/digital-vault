@@ -4,87 +4,101 @@
     v-model="isValid"
     @submit.prevent="saveWrapper"
   >
-    <v-row
-      v-if="item"
-      class="mb-3"
-    >
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.name"
-          label="Name"
-          :rules="[rules.required]"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-switch
-          v-model="item.isDefault"
-          label="Default"
-        />
-      </v-col>
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-textarea
-          v-model="item.description"
-          label="Description"
-          rows="3"
-        />
-      </v-col>
+    <v-card>
+      <v-card-title>Retention Details</v-card-title>
+      <v-card-text>
+        <v-row
+          v-if="item"
+          class="mb-3"
+        >
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.name"
+              label="Name"
+              :rules="[rules.required]"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-switch
+              v-model="item.isDefault"
+              label="Default"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="12"
+          >
+            <v-textarea
+              v-model="item.description"
+              label="Description"
+              rows="3"
+            />
+          </v-col>
 
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.expireSchedule"
-          label="Expire schedule"
-        />
-      </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.expireSchedule"
+              label="Expire schedule"
+            />
+          </v-col>
 
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.expireAction"
-          label="Expire action"
-        />
-      </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.expireAction"
+              label="Expire action"
+            />
+          </v-col>
 
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.retentionDays"
-          label="Retention days"
-        />
-      </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.retentionDays"
+              label="Retention days"
+            />
+          </v-col>
 
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <v-text-field
-          v-model="item.retentionDate"
-          label="Retention date"
-        />
-      </v-col>
-    </v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              v-model="item.retentionDate"
+              label="Retention date"
+            />
+          </v-col>
+        </v-row>
 
-    <v-btn
-      :disabled="!isValid"
-      :loading="isLoading"
-      type="submit"
-      >Save</v-btn
-    >
+        <div class="d-flex">
+          <v-btn
+            :disabled="!isValid"
+            :loading="isLoading"
+            type="submit"
+            >Save</v-btn
+          >
+          <v-spacer />
+          <v-btn
+            color="secondary"
+            variant="outlined"
+            :to="{ name: 'administration/RetentionListPage' }"
+            >Cancel</v-btn
+          >
+        </div>
+      </v-card-text>
+    </v-card>
   </v-form>
 </template>
 

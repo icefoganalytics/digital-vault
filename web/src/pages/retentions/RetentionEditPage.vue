@@ -4,23 +4,18 @@
 
 <script setup lang="ts">
 import RetentionForm from "@/components/retentions/RetentionForm.vue"
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 
 const props = defineProps<{
   retentionId: string
 }>()
 
-useBreadcrumbs([
+useBreadcrumbs("Edit Retention", [
+  ADMIN_CRUMB,
   {
-    title: "Retention",
+    title: "Retentions",
     to: {
       name: "administration/RetentionListPage",
-    },
-  },
-  {
-    title: "Edit Retention",
-    to: {
-      name: "administration/RetentionNewPage",
     },
   },
 ])

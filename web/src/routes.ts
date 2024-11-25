@@ -13,19 +13,20 @@ const routes: RouteRecordRaw[] = [
         path: "dashboard",
         name: "DashboardPage",
         component: () => import("@/pages/DashboardPage.vue"),
-        meta: { title: "Dashboard" },
+        meta: { title: "Home" },
       },
       {
         path: "profile",
         name: "ProfilePage",
         component: () => import("@/pages/ProfilePage.vue"),
+        meta: { title: "My Profile" },
       },
       {
         path: "administration",
         name: "administration",
         children: [
           {
-            path: "dashboard",
+            path: "",
             name: "administration/DashboardPage",
             component: () => import("@/pages/administration/DashboardPage.vue"),
           },
@@ -77,51 +78,74 @@ const routes: RouteRecordRaw[] = [
             component: () => import("@/pages/categories/CategoryEditPage.vue"),
             props: true,
           },
+
+          {
+            path: "users",
+            name: "users/UsersPage",
+            component: () => import("@/pages/users/UsersPage.vue"),
+          },
+          {
+            path: "users/new",
+            name: "users/UserNewPage",
+            component: () => import("@/pages/users/UserNewPage.vue"),
+          },
+          {
+            path: "users/:userId/edit",
+            name: "users/UserEditPage",
+            component: () => import("@/pages/users/UserEditPage.vue"),
+            props: true,
+          },
         ],
       },
       {
-        path: "users",
-        name: "users/UsersPage",
-        component: () => import("@/pages/users/UsersPage.vue"),
-      },
-      {
-        path: "users/new",
-        name: "users/UserNewPage",
-        component: () => import("@/pages/users/UserNewPage.vue"),
-      },
-      {
-        path: "users/:userId/edit",
-        name: "users/UserEditPage",
-        component: () => import("@/pages/users/UserEditPage.vue"),
-        props: true,
+        path: "archive-items",
+        name: "archive-item/ArchiveItemListPage",
+        children: [
+          {
+            path: "",
+            name: "archive-item/ArchiveItemListPage",
+            component: () => import("@/pages/archive-item/ArchiveItemListPage.vue"),
+            meta: { title: "Archive Items" },
+            props: true,
+          },
+          {
+            path: "new",
+            name: "archive-item/ArchiveItemNewPage",
+            component: () => import("@/pages/archive-item/ArchiveItemNewPage.vue"),
+            props: true,
+          },
+          {
+            path: ":archiveItemId/view",
+            name: "archive-item/ArchiveItemViewPage",
+            component: () => import("@/pages/archive-item/ArchiveItemViewPage.vue"),
+            props: true,
+          },
+        ],
       },
 
       {
-        path: "archive-item/new",
-        name: "archive-item/ArchiveItemNewPage",
-        component: () => import("@/pages/archive-item/ArchiveItemNewPage.vue"),
-        props: true,
-      },
-      {
-        path: "archive-item/:archiveItemId/view",
-        name: "archive-item/ArchiveItemViewPage",
-        component: () => import("@/pages/archive-item/ArchiveItemViewPage.vue"),
-        props: true,
-      },
-      {
-        path: "archive-item",
-        name: "archive-item/ArchiveItemListPage",
-        component: () => import("@/pages/archive-item/ArchiveItemListPage.vue"),
-      },
-      {
-        path: "decisions/record",
-        name: "decisions/DecisionNewPage",
-        component: () => import("@/pages/decisions/DecisionNewPage.vue"),
-      },
-      {
         path: "decisions",
         name: "decisions/DecisionListPage",
-        component: () => import("@/pages/decisions/DecisionNewPage.vue"),
+        children: [
+          {
+            path: "",
+            name: "decisions/DecisionListPage",
+            component: () => import("@/pages/decisions/DecisionListPage.vue"),
+            meta: { title: "Decision" },
+          },
+          {
+            path: "record",
+            name: "decisions/DecisionNewPage",
+            component: () => import("@/pages/decisions/DecisionNewPage.vue"),
+            meta: { title: "Decision" },
+          },
+          {
+            path: ":decisionId/view",
+            name: "decisions/DecisionViewPage",
+            component: () => import("@/pages/decisions/DecisionViewPage.vue"),
+            props: true,
+          },
+        ],
       },
     ],
   },

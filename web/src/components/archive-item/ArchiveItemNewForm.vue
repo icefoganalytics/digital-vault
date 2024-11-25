@@ -5,144 +5,129 @@
     v-model="isValid"
     @submit.prevent="saveWrapper"
   >
-    <v-row>
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <v-text-field
-          v-model="createItem.title"
-          label="Title"
-          :rules="[rules.required]"
-        ></v-text-field>
-      </v-col>
-      <v-col
-        cols="12"
-        md="4"
-      >
-        <SecurityLevelSelect
-          v-model="createItem.securityLevel"
-          :rules="[rules.required]"
-          label="Security level"
-        />
-      </v-col>
-      <v-col cols="12">
-        <v-textarea
-          v-model="createItem.description"
-          label="Description"
-          rows="3"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card variant="outlined">
-          <v-card-title>Retention</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <RetentionSelect
-                  v-model="retention"
-                  :rules="[rules.required]"
-                  return-object
-                  label="Policy"
-                />
-              </v-col>
-              <v-col
-                v-if="retention"
-                cols="12"
-                md="4"
-                ><v-text-field
-                  :model-value="formatDate(createItem.calculatedExpireDate)"
-                  label="Expires on"
-                  append-inner-icon="mdi-lock"
-                  readonly
-                />
-              </v-col>
-              <v-col
-                v-if="retention"
-                cols="12"
-                md="4"
-              >
-                <v-text-field
-                  :model-value="createItem.expireAction"
-                  label="When item expires"
-                  append-inner-icon="mdi-lock"
-                  readonly
-                />
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
+    <v-card>
+      <FileDrop @files-dropped="handleFileDrop">
+        <v-card-title>Archive Item Description</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <v-text-field
+                v-model="createItem.title"
+                label="Title"
+                :rules="[rules.required]"
+              ></v-text-field>
+            </v-col>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <SecurityLevelSelect
+                v-model="createItem.securityLevel"
+                :rules="[rules.required]"
+                label="Security level"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                v-model="createItem.description"
+                label="Description"
+                rows="3"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
 
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card variant="outlined">
-          <v-card-title>Categories and Tags</v-card-title>
-          <v-card-text>
-            <p class="mb-4">
-              Categories and Tags are used as filter criteria to find items in the archive as well
-              as determine who can see the items. You can select as many of each as are applicable
-              to this item. Additional categories potentially increase the number of people that can
-              see this information, but also make it more accessible in the future.
-            </p>
-            <CategorySelect
-              v-model="createItem.categories"
-              :rules="[rules.required]"
-              :hide-details="false"
-              label="Categories"
-              hide-selected
-              clearable
-              multiple
-              chips
-            />
-            <v-combobox
-              v-model="createItem.tags"
-              label="Tags"
-              multiple
-              chips
-              clearable
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
+        <v-card-title>Retention</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <RetentionSelect
+                v-model="retention"
+                :rules="[rules.required]"
+                return-object
+                label="Policy"
+              />
+            </v-col>
+            <v-col
+              v-if="retention"
+              cols="12"
+              md="4"
+              ><v-text-field
+                :model-value="formatDate(createItem.calculatedExpireDate)"
+                label="Expires on"
+                append-inner-icon="mdi-lock"
+                readonly
+              />
+            </v-col>
+            <v-col
+              v-if="retention"
+              cols="12"
+              md="4"
+            >
+              <v-text-field
+                :model-value="createItem.expireAction"
+                label="When item expires"
+                append-inner-icon="mdi-lock"
+                readonly
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
 
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card variant="outlined">
-          <FileDrop @files-dropped="handleFileDrop">
-            <v-card-title>Attachments</v-card-title>
-            <v-card-text>
-              <p class="mb-4">Drag and drop files or click the box belox</p>
-              <v-file-input
-                v-model="createItem.files"
-                multiple
-                chips
-                clearable
-                label="Attachments"
-            /></v-card-text>
-          </FileDrop>
-        </v-card>
-      </v-col>
-    </v-row>
-    {{ createItem }}
+        <v-card-title>Categories and Tags</v-card-title>
+        <v-card-text>
+          <p class="mb-4">
+            Categories and Tags are used as filter criteria to find items in the archive as well as
+            determine who can see the items. You can select as many of each as are applicable to
+            this item. Additional categories potentially increase the number of people that can see
+            this information, but also make it more accessible in the future.
+          </p>
+          <CategorySelect
+            v-model="createItem.categories"
+            :rules="[rules.required]"
+            :hide-details="false"
+            label="Categories"
+            hide-selected
+            clearable
+            multiple
+            chips
+          />
+          <v-combobox
+            v-model="createItem.tags"
+            label="Tags"
+            multiple
+            chips
+            clearable
+          />
+        </v-card-text>
 
-    <v-btn
-      type="submit"
-      :disabled="!isValid"
-      >Save</v-btn
-    >
+        <v-card-title>Attachments</v-card-title>
+
+        <v-card-text>
+          <p class="mb-4">Drag and drop files or click the box belox</p>
+          <v-file-input
+            v-model="createItem.files"
+            multiple
+            chips
+            clearable
+            label="Attachments"
+          />
+
+          <v-btn
+            type="submit"
+            class="mt-5"
+            :disabled="!isValid"
+            >Save</v-btn
+          >
+        </v-card-text>
+      </FileDrop>
+    </v-card>
   </v-form>
 </template>
 

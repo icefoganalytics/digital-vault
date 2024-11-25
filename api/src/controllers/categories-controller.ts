@@ -8,6 +8,11 @@ import { IndexSerializer } from "@/serializers/categories"
 import BaseController from "@/controllers/base-controller"
 
 export class CategoriesController extends BaseController<Category> {
+  cacheIndex = true
+  cacheShow = true
+  cacheDuration = 90
+  cachePrefix = "categories-"
+
   async index() {
     try {
       const where = this.buildWhere()
@@ -19,9 +24,10 @@ export class CategoriesController extends BaseController<Category> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["retention"],
       })
       const serializedCategories = IndexSerializer.perform(categories)
-      return this.response.json({
+      return this.cacheAndSendJson({
         categories: serializedCategories,
         totalCount,
       })
@@ -49,7 +55,7 @@ export class CategoriesController extends BaseController<Category> {
         })
       }
 
-      return this.response.json({ category, policy })
+      return this.cacheAndSendJson({ category, policy })
     } catch (error) {
       logger.error("Error fetching category" + error)
       return this.response.status(400).json({

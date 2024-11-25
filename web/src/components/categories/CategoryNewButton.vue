@@ -2,6 +2,7 @@
   <v-btn
     v-if="isSystemAdmin"
     :to="{ name: 'administration/CategoryNewPage' }"
+    style="height: 40px"
     >New Category</v-btn
   >
 </template>

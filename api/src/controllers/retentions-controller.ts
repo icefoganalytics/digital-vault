@@ -8,6 +8,11 @@ import { IndexSerializer } from "@/serializers/retentions"
 import BaseController from "@/controllers/base-controller"
 
 export class RetentionsController extends BaseController<Retention> {
+  cacheIndex = true
+  cacheShow = true
+  cacheDuration = 90
+  cachePrefix = "retentions-"
+
   async index() {
     try {
       const where = this.buildWhere()
@@ -21,7 +26,7 @@ export class RetentionsController extends BaseController<Retention> {
         offset: this.pagination.offset,
       })
       const serializedRetentions = IndexSerializer.perform(retentions)
-      return this.response.json({
+      return this.cacheAndSendJson({
         retentions: serializedRetentions,
         totalCount,
       })
@@ -49,7 +54,7 @@ export class RetentionsController extends BaseController<Retention> {
         })
       }
 
-      return this.response.json({ retention, policy })
+      return this.cacheAndSendJson({ retention, policy })
     } catch (error) {
       logger.error("Error fetching retention" + error)
       return this.response.status(400).json({

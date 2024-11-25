@@ -2,124 +2,63 @@
   <v-navigation-drawer
     v-model="showDrawer"
     :disable-resize-watcher="false"
+    :rail="showRail"
+    :permanent="mdAndUp"
+    :location="!mdAndUp ? 'bottom' : undefined"
+    color="#212121"
   >
-    <v-list v-model:opened="open">
-      <v-list-item title="Digital Vault"></v-list-item>
-      <v-divider></v-divider>
+    <v-list
+      v-model:opened="open"
+      class="pt-0"
+      color="warning"
+    >
       <v-list-item
+        prepend-icon="mdi-shield-key"
+        style="height: 64px"
         :to="{ name: 'DashboardPage' }"
-        title="Home"
-        prepend-icon="mdi-home"
-      />
+      >
+        <span class="text-h6">The Vault</span>
+      </v-list-item>
 
       <v-list-item
         title="Archive Items"
         :to="{ name: 'archive-item/ArchiveItemListPage' }"
-        prepend-icon="mdi-clock"
+        :exact="false"
+        prepend-icon="mdi-archive"
       />
 
       <v-list-item
-        title="New Archive Item"
-        :to="{ name: 'archive-item/ArchiveItemNewPage' }"
-        prepend-icon="mdi-clock"
-      />
-
-      <v-list-item
-        :to="{ name: 'ProfilePage' }"
-        :title="username"
-        prepend-icon="mdi-account"
-      />
-
-      <v-list-item
-        :to="{ name: 'decisions/DecisionNewPage' }"
-        title="Decision"
+        :to="{ name: 'decisions/DecisionListPage' }"
+        title="Decisions"
         prepend-icon="mdi-call-split"
       />
 
-      <v-list-group
+      <v-list-item
         v-if="isSystemAdmin"
-        value="Administration"
-      >
-        <template #activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            title="Administration"
-            prepend-icon="mdi-cog-outline"
-          />
-        </template>
-
-        <v-list-item
-          title="Dashboard"
-          :to="{ name: 'administration/DashboardPage' }"
-          prepend-icon="mdi-home"
-        />
-        <v-list-item
-          :to="{ name: 'users/UsersPage' }"
-          title="Users"
-          prepend-icon="mdi-account-circle"
-        />
-        <v-list-item
-          :to="{ name: 'administration/SourceListPage' }"
-          title="Sources"
-          prepend-icon="mdi-account-circle"
-        />
-        <v-list-item
-          :to="{ name: 'administration/RetentionListPage' }"
-          title="Retentions"
-          prepend-icon="mdi-account-circle"
-        />
-        <v-list-item
-          :to="{ name: 'administration/CategoryListPage' }"
-          title="Categories"
-          prepend-icon="mdi-account-circle"
-        />
-      </v-list-group>
-
-      <v-list-item
-        :title="releaseTag || 'loading...'"
-        :to="{ name: 'StatusPage' }"
-        prepend-icon="mdi-clock"
-      />
-      <v-list-item
-        title="Sign out"
-        prepend-icon="mdi-exit-run"
-        @click="logoutWrapper"
+        title="Administration"
+        :to="{ name: 'administration/DashboardPage' }"
+        :exact="false"
+        prepend-icon="mdi-cog"
       />
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
-import { useAuth0 } from "@auth0/auth0-vue"
+import { ref } from "vue"
 
 import useCurrentUser from "@/use/use-current-user"
-import useStatus from "@/use/use-status"
+import { useDisplay } from "vuetify/lib/framework.mjs"
+
+const { mdAndUp } = useDisplay()
+
+defineProps<{ showRail: boolean }>()
 
 const showDrawer = defineModel<boolean>({
   default: false,
 })
+
 const open = ref([])
 
-const { logout } = useAuth0()
-
-const { currentUser, isSystemAdmin } = useCurrentUser()
-
-const username = computed(() => {
-  if (currentUser.value === null) return "loading..."
-
-  const { displayName } = currentUser.value
-  return displayName
-})
-
-const { releaseTag } = useStatus()
-
-async function logoutWrapper() {
-  await logout({
-    logoutParams: {
-      // I would prefer to redirect to /sign-in here, but that doesn't seem to work?
-      returnTo: window.location.origin,
-    },
-  })
-}
+const { isSystemAdmin } = useCurrentUser()
 </script>

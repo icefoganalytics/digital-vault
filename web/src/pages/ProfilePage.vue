@@ -1,14 +1,8 @@
 <template>
   <v-skeleton-loader v-if="isNil(currentUser)" />
   <v-container v-else>
-    <h2 class="d-flex flex-column flex-md-row justify-space-between mb-3">
-      <span>
-        My Profile:
-        <v-chip variant="outlined">
-          {{ displayName }}
-        </v-chip>
-      </span>
-
+    <div class="d-flex flex-column flex-md-row justify-space-between mb-3">
+      <v-spacer />
       <div class="d-flex justify-space-between mt-4 mb-3 my-md-0">
         <v-btn
           color="primary"
@@ -27,7 +21,7 @@
           Sync
         </v-btn>
       </div>
-    </h2>
+    </div>
 
     <UserEditForm
       class="mt-10"
@@ -39,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, } from "vue"
 import { isNil } from "lodash"
 
 import useBreadcrumbs from "@/use/use-breadcrumbs"
@@ -49,18 +42,7 @@ import UserEditForm from "@/components/users/UserEditForm.vue"
 
 const { currentUser, refresh } = useCurrentUser<true>()
 
-const displayName = computed(() => {
-  if (currentUser.value === null) return "loading..."
-
-  return currentUser.value.displayName
-})
-
-useBreadcrumbs([
-  {
-    title: "Profile",
-    to: { name: "ProfilePage" },
-  },
-])
+useBreadcrumbs("My Profile")
 </script>
 
 <style scoped></style>

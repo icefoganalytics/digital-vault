@@ -21,6 +21,7 @@ import {
   ArchiveItemsController,
   CategoriesController,
   CurrentUserController,
+  DecisionsController,
   RetentionsController,
   SourcesController,
   UsersController,
@@ -65,6 +66,7 @@ router
   .delete(RetentionsController.destroy)
 
 router.route("/api/categories").get(CategoriesController.index).post(CategoriesController.create)
+
 router
   .route("/api/categories/:id")
   .get(CategoriesController.show)
@@ -80,6 +82,16 @@ router
   .get(ArchiveItemsController.show)
   .patch(ArchiveItemsController.update)
   .delete(ArchiveItemsController.destroy)
+  
+router
+.route("/api/decisions")
+.get(DecisionsController.index)
+.post(DecisionsController.create)
+router
+.route("/api/decisions/:id")
+.get(DecisionsController.show)
+.patch(DecisionsController.update)
+.delete(DecisionsController.destroy)
 
 // if no other routes match, return a 404
 router.use("/api", (_req: Request, res: Response) => {

@@ -1,113 +1,77 @@
 <template>
-  <v-form>
+  <v-form
+    v-if="createItem"
+    ref="form"
+    v-model="isValid"
+    @submit.prevent="saveWrapper"
+  >
     <v-row>
       <v-col
         cols="12"
         md="8"
       >
-        <h1>Background Information</h1>
-        <v-card
-          variant="outlined"
-          class="mb-5"
-        >
-          <v-card-title>Description</v-card-title>
+        <h2 class="mb-3">Background Information</h2>
+        <v-card class="mb-5">
+          <FileDrop @files-dropped="handleFileDrop">
+            <v-card-title>Description</v-card-title>
 
-          <v-card-text>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="title"
-                  label="Title"
-                  readonly
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="description"
-                  label="Description"
-                  readonly
-                  rows="3"
-                />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="source"
-                  label="Source"
-                  readonly
-                  rows="3"
-                />
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  v-model="sourceUrl"
-                  label="Source url"
-                  readonly
-                  rows="3"
-                />
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
+            <v-card-text>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="createItem.title"
+                    :rules="[rules.required]"
+                    label="Title"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    v-model="createItem.description"
+                    label="Description"
+                    rows="3"
+                  />
+                </v-col>
+              </v-row>
+            </v-card-text>
 
-        <v-card
-          variant="outlined"
-          class="mb-5"
-        >
-          <v-card-title>Categories and Tags</v-card-title>
-          <v-card-text>
-            <v-select
-              v-model="categoryNames"
-              :hide-details="false"
-              label="Categories"
-              multiple
-              chips
-              readonly
-            />
-            <v-combobox
-              v-model="tags"
-              label="Tags"
-              multiple
-              chips
-              clearable
-            />
-          </v-card-text>
-        </v-card>
+            <v-card-title>Categories and Tags</v-card-title>
+            <v-card-text>
+              <CategorySelectWithRetention
+                v-model="createItem.categories"
+                :rules="[rules.required]"
+                :hide-details="false"
+                label="Categories"
+              />
+              <v-combobox
+                v-model="createItem.tags"
+                label="Tags"
+                multiple
+                chips
+                clearable
+              />
+            </v-card-text>
 
-        <v-card
-          variant="outlined"
-          class="mb-5"
-        >
-          <v-card-title>Attachments</v-card-title>
-          <v-card-text v-if="files && files.length > 0">
-            <v-row>
-              <v-col
-                v-for="file of files"
-                :key="file.id"
-                cols="12"
-                md="3"
-              >
-                <v-card
-                  variant="outlined"
-                  class="fill-height"
-                >
-                  <v-card-text>
-                    {{ file.originalFileName }}
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-card-text v-else> No Attachments </v-card-text>
+            <v-card-title>Attachments</v-card-title>
+            <v-card-text>
+              <p class="mb-4">Drag and drop files or click the box belox</p>
+              <v-file-input
+                v-model="createItem.files"
+                multiple
+                chips
+                clearable
+                label="Attachments"
+              />
+            </v-card-text>
+          </FileDrop>
         </v-card>
       </v-col>
       <v-col
         cols="12"
         md="4"
       >
-        <h1>Decision</h1>
+        <h2 class="mb-3">Decision</h2>
         <v-card
-          variant="outlined"
+          variant="tonal"
           class="mb-5"
         >
           <v-card-title>Record Your Decision</v-card-title>
@@ -134,8 +98,10 @@
                 md="6"
               >
                 <v-btn
-                  color="green"
+                  color="success"
                   block
+                  :disabled="!isValid"
+                  @click="saveWrapper('Approve')"
                   >Approve</v-btn
                 >
               </v-col>
@@ -144,8 +110,10 @@
                 md="6"
               >
                 <v-btn
-                  color="info"
+                  color="error"
                   block
+                  :disabled="!isValid"
+                  @click="saveWrapper('Reject')"
                   >Reject</v-btn
                 >
               </v-col>
@@ -154,30 +122,119 @@
         </v-card>
       </v-col>
     </v-row>
+    {{ createItem }}
   </v-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 
-import useBreadcrumbs from "@/use/use-breadcrumbs"
+import useSnack from "@/use/use-snack"
+import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
+import useDecision from "@/use/use-decision"
+import { SecurityLevel } from "@/api/decisions-api"
+import { VForm } from "vuetify/lib/components/index.mjs"
+import { isArray, isEmpty, isNil } from "lodash"
+import { useRouter } from "vue-router"
+import FileDrop from "@/components/common/FileDrop.vue"
+import CategorySelectWithRetention from "@/components/categories/CategorySelectWithRetention.vue"
+import useCategories from "@/use/use-categories"
+import { DateTime } from "luxon"
 
-const files = ref([{ originalFileName: "SJ-Signed.pdf", id: 12 }])
-const title = ref("Staffing Justification for Additional DBA Position")
-const description = ref(
-  "ICT needs more DBAs to be able to support all of these applications Ice Fog Analytics is building. An additional DBA is required."
-)
-const source = ref("WRAP")
-const sourceUrl = ref("https://wrap.com/hpw-7Hg-88V/view")
-const categoryNames = ref(["HPW Human Resources", "Staffing Justifications"])
-const tags = ref([])
+const rules = {
+  required: (value: string | null) => !!value || "Field is required",
 
-useBreadcrumbs([
-  {
-    title: "Record Your Decision",
-    to: {
-      name: "decisions/DecisionNewPage",
-    },
+  email(value: string | null) {
+    if (isNil(value) || isEmpty(value)) return true
+    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+    return "Must be a valid e-mail."
   },
+}
+
+const { createItem, isUpdate, save } = useDecision(ref(null))
+const { items } = useCategories()
+const snack = useSnack()
+const router = useRouter()
+
+const isValid = ref(false)
+const isLoading = ref(false)
+const form = ref<InstanceType<typeof VForm> | null>(null)
+
+useBreadcrumbs("Record a Decision", [
+  BASE_CRUMB,
+  { title: "Decisions", to: { name: "decisions/DecisionListPage" } },
 ])
+
+onMounted(() => {
+  createItem.value = {
+    title: "",
+    decisionText: "",
+    securityLevel: SecurityLevel.LOW,
+    description: null,
+    expireAction: null,
+    calculatedExpireDate: null,
+    overrideExpireDate: null,
+    retentionName: null,
+    summary: null,
+    categories: null,
+    tags: [],
+    files: [],
+  }
+})
+
+watch(
+  () => createItem.value?.categories,
+  (newValue) => {
+    if (createItem.value && newValue) {
+      const category = items.value.find((i) => i.id == (isArray(newValue) ? newValue[0] : newValue))
+
+      if (category && category.retention) {
+        createItem.value.retentionName = category.retention.name
+        createItem.value.expireAction = category.retention.expireAction
+
+        if (category.retention.retentionDate) {
+          createItem.value.calculatedExpireDate = category.retention.retentionDate
+        } else if (category.retention.retentionDays) {
+          createItem.value.calculatedExpireDate = DateTime.now()
+            .set({ hour: 23, minute: 59, second: 59, millisecond: 0 })
+            .toUTC()
+            .plus({ days: category.retention.retentionDays })
+            .toFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        }
+      }
+    }
+  }
+)
+
+function handleFileDrop(droppedFiles: File[]) {
+  if (createItem.value) createItem.value.files = droppedFiles
+}
+
+async function saveWrapper(decisionText: string) {
+  if (isNil(form.value)) return
+  if (isNil(decisionText)) return
+
+  const { valid } = await form.value.validate()
+  if (!valid) {
+    snack.error("Please fill out all required fields")
+    return
+  }
+
+  if (createItem.value) createItem.value.decisionText = decisionText
+
+  isLoading.value = true
+  try {
+    await save()
+
+    if (isUpdate) snack.success("Item saved.")
+    else snack.success("Item created.")
+
+    router.push({ name: "decisions/DecisionListPage" })
+  } catch (error) {
+    snack.error("Save failed!")
+    throw error
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>

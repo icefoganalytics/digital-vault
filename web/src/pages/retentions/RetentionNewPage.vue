@@ -1,26 +1,21 @@
 <template>
-  <h1>Add a Retention</h1>
   <RetentionForm :retention-id="retentionId" />
 </template>
 
 <script setup lang="ts">
-import useBreadcrumbs from "@/use/use-breadcrumbs"
 import { ref } from "vue"
+
+import useBreadcrumbs, { ADMIN_CRUMB } from "@/use/use-breadcrumbs"
 import RetentionForm from "@/components/retentions/RetentionForm.vue"
 
 const retentionId = ref(null)
 
-useBreadcrumbs([
+useBreadcrumbs("New Retention", [
+  ADMIN_CRUMB,
   {
     title: "Retentions",
     to: {
       name: "administration/RetentionListPage",
-    },
-  },
-  {
-    title: "New Retention",
-    to: {
-      name: "administration/RetentionNewPage",
     },
   },
 ])
