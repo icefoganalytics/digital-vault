@@ -121,7 +121,6 @@
         </v-card>
       </v-col>
     </v-row>
-    {{ createItem }}
   </v-form>
 </template>
 
