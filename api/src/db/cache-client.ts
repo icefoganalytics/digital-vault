@@ -42,6 +42,10 @@ class CacheClient {
   async setValue(key: string, value: any, expireSeconds = 0) {
     this.client.set(key, value, { EX: expireSeconds })
   }
+  // eslint-disable-next-line
+  async setValueNoExpire(key: string, value: any) {
+    this.client.set(key, value)
+  }
   async getValue(key: string) {
     return this.client.get(key)
   }
@@ -62,6 +66,27 @@ class CacheClient {
         await this.client.del(keys)
       }
     } while (cursor !== 0)
+  }
+
+  async getKeysByPattern(pattern: string): Promise<string[]> {
+    console.log("getKeysByPattern", pattern)
+    const scanCommand = { MATCH: `${pattern}*` } as ScanCommandOptions
+    let cursor = 0
+    let matches = new Array<string>()
+
+    console.log("getKeysByPattern", pattern, scanCommand)
+
+    do {
+      const reply = await this.client.scan(cursor, scanCommand)
+      cursor = reply.cursor
+      const keys = reply.keys
+
+      if (keys.length > 0) {
+        matches = matches.concat(keys)
+      }
+    } while (cursor !== 0)
+
+    return matches
   }
 }
 

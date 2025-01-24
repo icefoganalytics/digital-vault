@@ -5,6 +5,7 @@ import db, { ArchiveItem, ArchiveItemCategory, ArchiveItemFile, User } from "@/m
 import BaseService from "@/services/base-service"
 import { ArchiveItemStatus } from "@/models/archive-item"
 import { FileStorageService } from "../file-storage-service"
+import cache from "@/db/cache-client"
 
 export type ArchiveItemCreationAttributes = Partial<CreationAttributes<ArchiveItem>> & {
   files: File[] | null
@@ -84,10 +85,13 @@ export class CreateService extends BaseService {
       if (!isNil(this.attributes.files)) {
         const service = new FileStorageService()
         const folderKey = service.makeKey()
+        const cacheClient = await cache.getClient()
 
         for (const file of this.attributes.files) {
           const fileKey = `${folderKey}/${service.makeKey()}`
-          await ArchiveItemFile.create(
+          const pdfKey = `${folderKey}/${service.makeKey()}`
+
+          const sourceFile = await ArchiveItemFile.create(
             {
               archiveItemId: archiveItem.id,
               originalFileName: file.name,
@@ -100,6 +104,13 @@ export class CreateService extends BaseService {
 
           // eslint-disable-next-line
           const uploadResp = await service.uploadFile(fileKey, (file as any).path)
+
+          await cacheClient.setValueNoExpire(`CONVERT_${pdfKey}`, JSON.stringify(sourceFile))
+
+          //const toConvert = await cacheClient.getKeysByPattern(`CONVERT_`)
+          //console.log(toConvert)
+          // this returns the values currently in the Cache that need to be converted
+
           if (uploadResp.errorCode) {
             throw Error("File upload error")
           }

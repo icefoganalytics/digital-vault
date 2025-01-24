@@ -129,5 +129,22 @@ services:
     environment:
       PLANTUML_LIMIT_SIZE: 8192
 
+  archiver:
+    build:
+      context: ./archiver
+      dockerfile: development.Dockerfile
+    env_file:
+      - ./archiver/.env.development
+    environment:
+      <<: *default-environment
+    tty: true # allows attaching debugger, equivalent of docker exec -t
+    # stdin_open: true # equivalent of docker exec -i
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./archiver:/usr/src/api
+      - ./.gitignore:/usr/src/.gitignore
+      - ./.prettierrc.yaml:/usr/src/.prettierrc.yaml
+
 volumes:
   db_data:
