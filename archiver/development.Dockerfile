@@ -19,14 +19,15 @@ COPY path/to/itextpdf-7.x.x.jar /app/libs/
 
 RUN npm install -g npm@10.9.0
 
-WORKDIR /usr/src/api
+RUN apk add --no-cache openjdk17
+
+WORKDIR /usr/src/archiver
 
 COPY package*.json ./
 
-RUN npm install
+# RUN npm install
 
 COPY . .
 
-RUN chmod +x ./bin/boot-app.sh
-
-CMD ["/usr/src/api/bin/boot-app.sh"]
+ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
+ENV PATH="$JAVA_HOME/bin:$PATH"

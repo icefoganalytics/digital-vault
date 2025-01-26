@@ -1,0 +1,4 @@
+pdf/ltvpdfsigner/custom/CustomTSAClient.class
+pdf/ltvpdfsigner/intraface/SecurePDFIntf.class
+pdf/ltvpdfsigner/implementation/SecurePDFImpl.class
+pdf/ltvpdfsigner/PDFSignerUtility.class

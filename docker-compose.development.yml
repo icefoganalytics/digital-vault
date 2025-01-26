@@ -142,7 +142,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./archiver:/usr/src/api
+      - ./archiver:/usr/src/archiver
       - ./.gitignore:/usr/src/.gitignore
       - ./.prettierrc.yaml:/usr/src/.prettierrc.yaml
 

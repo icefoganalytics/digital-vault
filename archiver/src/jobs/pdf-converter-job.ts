@@ -35,7 +35,8 @@ export class PDFConverterJob {
       // it can be saved to a local directory for processing if required.
 
       // after the conversion is complete, upload the file to the file store, update the file record and delete the cache key
-      /* const uploadResp = await fileStore.uploadFile(convertedPdfKey, convertedAndSignedFile)
+      /* 
+      const uploadResp = await fileStore.uploadFile(convertedPdfKey, convertedAndSignedFile)
 
       if (uploadResp.errorCode) {
         throw Error("File upload error")
@@ -45,7 +46,7 @@ export class PDFConverterJob {
       fileRecord.pdfFileName = `${fileRecord.originalFileName}_SIGNED.pdf`
       fileRecord.pdfMimeType = "application/pdf"
       fileRecord.pdfFileSize = convertedAndSignedFile.length
-      await fileRecord.save()
+      await fileRecord.update()
 
       cache.deleteValue(key) */
     }
