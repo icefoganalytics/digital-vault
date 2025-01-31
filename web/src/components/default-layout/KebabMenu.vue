@@ -21,11 +21,6 @@
         prepend-icon="mdi-cog-outline"
       />
       <v-list-item
-        :title="releaseTag || 'loading...'"
-        :to="{ name: 'StatusPage' }"
-        prepend-icon="mdi-clock"
-      />
-      <v-list-item
         title="Sign out"
         prepend-icon="mdi-exit-run"
         @click="logoutWrapper"
@@ -38,7 +33,6 @@
 import { computed } from "vue"
 
 import { useAuth0 } from "@auth0/auth0-vue"
-import useStatus from "@/use/use-status"
 import useCurrentUser from "@/use/use-current-user"
 
 const { logout } = useAuth0()
@@ -51,8 +45,6 @@ const username = computed(() => {
   const { displayName } = currentUser.value
   return displayName
 })
-
-const { releaseTag } = useStatus()
 
 async function logoutWrapper() {
   await logout({
