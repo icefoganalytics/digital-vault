@@ -57,7 +57,7 @@ watch(
         console.log("Failed to load current user:", error)
         isErrored.value = true
         await router.isReady()
-        await router.push({ name: "UnauthorizedPage" })
+        await router.push({ name: "SignInPage" })
       }
     }
   },
