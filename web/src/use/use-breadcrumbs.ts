@@ -35,7 +35,6 @@ const state = reactive<{
 export function useBreadcrumbs(title?: string, breadcrumbs?: Breadcrumb[]) {
   if (!isUndefined(title)) {
     state.title = title
-    console.info("SETTING ITLE", title)
   }
   if (!isUndefined(breadcrumbs)) state.breadcrumbs = breadcrumbs
 
