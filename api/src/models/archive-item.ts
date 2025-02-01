@@ -148,6 +148,7 @@ export class ArchiveItem extends BaseModel<
   declare deletedAt: Date | null
 
   // Magic Attributes
+  declare archiveItemFileCount?: number
 
   // Associations
   @HasMany(() => ArchiveItemFile, {
@@ -175,6 +176,24 @@ export class ArchiveItem extends BaseModel<
     this.addSearchScope(["title", "tags"])
     this.addScope("DecisionsOnly", { where: { isDecision: true } })
     this.addScope("ArchiveItemsOnly", { where: { isDecision: false } })
+
+    const tableAlias = sql.literal(this.name)
+    this.addScope("withArchiveItemFileCounts", {
+      attributes: {
+        include: [
+          [
+            sql`(
+              SELECT COUNT(*)
+              FROM archive_item_files
+              WHERE
+                archive_item_files.archive_item_id = ${tableAlias}.id AND
+                archive_item_files.deleted_at IS NULL
+            )`,
+            "archiveItemFileCount",
+          ],
+        ],
+      },
+    })
   }
 }
 

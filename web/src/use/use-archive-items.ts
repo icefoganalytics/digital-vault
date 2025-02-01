@@ -3,38 +3,37 @@ import archiveItemsApi, {
   ArchiveItemFiltersOptions,
   ArchiveItemWhereOptions,
 } from "@/api/archive-items-api"
-import { reactive, toRefs } from "vue"
+import { reactive, ref, Ref, toRefs, unref, watch } from "vue"
 
-// Global state for breadcrumbs
-const state = reactive<{
-  items: ArchiveItem[]
-  totalCount: number
-  isLoading: boolean
-  isErrored: boolean
-}>({
-  items: [],
-  totalCount: 0,
-  isLoading: false,
-  isErrored: false,
-})
+export function useArchiveItems(
+  queryOptions: Ref<{
+    where?: ArchiveItemWhereOptions
+    filters?: ArchiveItemFiltersOptions
+    page?: number
+    perPage?: number
+  }> = ref({}),
+  { skipWatchIf = () => false }: { skipWatchIf?: () => boolean } = {}
+) {
+  const state = reactive<{
+    items: ArchiveItem[]
+    totalCount: number
+    isLoading: boolean
+    isErrored: boolean
+  }>({
+    items: [],
+    totalCount: 0,
+    isLoading: false,
+    isErrored: false,
+  })
 
-export function useArchiveItems() {
-  // state.breadcrumbs = [BASE_CRUMB, ...breadcrumbs]
-
-  async function list(
-    params: {
-      where?: ArchiveItemWhereOptions
-      filters?: ArchiveItemFiltersOptions
-      page?: number
-      perPage?: number
-    } = {}
-  ): Promise<void> {
+  async function fetch(): Promise<ArchiveItem[]> {
     state.isLoading = true
     try {
-      const { archiveItems, totalCount } = await archiveItemsApi.list(params)
+      const { archiveItems, totalCount } = await archiveItemsApi.list(unref(queryOptions))
       state.isErrored = false
       state.items = archiveItems
       state.totalCount = totalCount
+      return archiveItems
     } catch (error) {
       console.error("Failed to fetch status:", error)
       state.isErrored = true
@@ -43,10 +42,21 @@ export function useArchiveItems() {
       state.isLoading = false
     }
   }
+  watch(
+    () => [skipWatchIf(), unref(queryOptions)],
+    async ([skip]) => {
+      if (skip) return
+
+      console.log("TT")
+
+      await fetch()
+    },
+    { deep: true, immediate: true }
+  )
 
   return {
     ...toRefs(state),
-    list,
+    fetch,
   }
 }
 

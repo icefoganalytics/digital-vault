@@ -10,7 +10,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
   async index() {
     try {
       const where = this.buildWhere()
-      const scopes = this.buildFilterScopes(["ArchiveItemsOnly"])
+      const scopes = this.buildFilterScopes(["ArchiveItemsOnly", "withArchiveItemFileCounts"])
       const scopedItems = ArchiveItemsPolicy.applyScope(scopes, this.currentUser)
 
       const totalCount = await scopedItems.count({ where })
@@ -19,6 +19,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
         limit: this.pagination.limit,
         offset: this.pagination.offset,
       })
+
       const serializedItems = IndexSerializer.perform(archiveItems)
       return this.response.json({
         archiveItems: serializedItems,

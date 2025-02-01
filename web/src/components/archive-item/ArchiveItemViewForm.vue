@@ -99,31 +99,6 @@
             readonly
           />
         </v-card-text>
-
-        <v-card-title>Attachments</v-card-title>
-        <v-card-text v-if="item.files && item.files.length > 0">
-          <v-row>
-            <v-col
-              v-for="file of item.files"
-              :key="file.id"
-              cols="12"
-              md="3"
-            >
-              <v-card
-                class="bg-secondary fill-height"
-                @click="downloadFile(file)"
-              >
-                <v-card-text>
-                  <p>
-                    {{ file.originalFileName }}
-                  </p>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
     </v-col>
 
@@ -131,20 +106,39 @@
       cols="12"
       md="4"
     >
-      <v-card variant="tonal">
-        <v-card-title>Recorded {{ formatDateTime(item.createdAt) }}</v-card-title>
+      <v-card
+        class="mb-5"
+        variant="tonal"
+      >
+        <v-card-title>RECORDED {{ formatDateTime(item.createdAt) }}</v-card-title>
+        <v-divider />
         <v-card-text>
           <div v-if="item.sourceId"></div>
           <div v-if="item.userId">
-            <p class="mb-0 text-subtitle-1">By: {{ item.user?.displayName }}</p>
+            <p class="mb-0 text-subtitle-1">BY: {{ item.user?.displayName }}</p>
             <p
               v-if="item.user?.title"
-              class="mb-5"
+              class="mb-0"
             >
-              {{ item.user?.title }}
+              TITLE: {{ item.user?.title }}
             </p>
           </div>
         </v-card-text>
+      </v-card>
+
+      <v-card>
+        <v-card-title>Attachments</v-card-title>
+
+        <v-card-text v-if="item.files && item.files.length > 0">
+          <div
+            v-for="file of item.files"
+            :key="file.id"
+          >
+            <ArchiveItemFileCard :file="file" />
+          </div>
+        </v-card-text>
+
+        <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
     </v-col>
   </v-row>
@@ -153,12 +147,11 @@
 <script setup lang="ts">
 import { computed } from "vue"
 
-import archiveItemsApi from "@/api/archive-items-api"
 import useArchiveItem from "@/use/use-archive-item"
 import { formatDate, formatDateTime } from "@/utils/formatters"
 
 import SecurityLevelSelect from "@/components/archive-item/SecurityLevelSelect.vue"
-import { ArchiveItemFile } from "@/api/archive-items-api"
+import ArchiveItemFileCard from "@/components/archive-item-files/ArchiveItemFileCard.vue"
 
 const props = defineProps<{
   archiveItemId: string
@@ -174,16 +167,4 @@ const categoryNames = computed(() => {
   }
   return []
 })
-
-async function downloadFile(file: ArchiveItemFile) {
-  if (!file.archiveItemId) return
-
-  const result = await archiveItemsApi.download(file.archiveItemId, file.id)
-  const newBlob = new Blob([result])
-  const objUrl = window.URL.createObjectURL(newBlob)
-  const link = document.createElement("a")
-  link.href = objUrl
-  link.download = file.originalFileName || "download"
-  link.click()
-}
 </script>

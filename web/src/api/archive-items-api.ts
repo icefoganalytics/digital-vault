@@ -125,10 +125,13 @@ export const archiveItemsApi = {
     return data
   },
 
-  async download(archiveItemId: number, fileId: number) {
-    const { data } = await http.get(`/api/archive-items/${archiveItemId}/files/${fileId}`, {
-      responseType: "blob",
-    })
+  async download(archiveItemId: number, fileId: number, getProtected: boolean) {
+    const { data } = await http.get(
+      `/api/archive-items/${archiveItemId}/files/${fileId}${getProtected ? "?format=protected" : ""}`,
+      {
+        responseType: "blob",
+      }
+    )
     return data
   },
 }

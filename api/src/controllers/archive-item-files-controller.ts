@@ -34,13 +34,29 @@ export class ArchiveItemFilesController extends BaseController<ArchiveItem> {
 
       if (selectedFile) {
         const fileService = new FileStorageService()
-        const fileResponse = await fileService.downloadFile(selectedFile.originalKey)
-        this.response.setHeader(
-          "Content-Disposition",
-          `attachment;filename="${selectedFile.originalFileName}"`
-        )
-        this.response.setHeader("Content-Type", selectedFile.originalMimeType)
-        return this.response.send(fileResponse)
+        const { format } = this.request.query
+        console.log("format", format)
+
+        if (format === "protected" && !isNil(selectedFile.pdfKey)) {
+
+          console.log("LOADING",selectedFile.pdfKey)
+
+          const fileResponse = await fileService.downloadFile(selectedFile.pdfKey)
+          this.response.setHeader(
+            "Content-Disposition",
+            `attachment;filename="${selectedFile.pdfFileName}"`
+          )
+          this.response.setHeader("Content-Type", selectedFile.pdfMimeType ?? "application/pdf")
+          return this.response.send(fileResponse)
+        } else {
+          const fileResponse = await fileService.downloadFile(selectedFile.originalKey)
+          this.response.setHeader(
+            "Content-Disposition",
+            `attachment;filename="${selectedFile.originalFileName}"`
+          )
+          this.response.setHeader("Content-Type", selectedFile.originalMimeType)
+          return this.response.send(fileResponse)
+        }
       }
     } catch (error) {
       logger.error("Error fetching item" + error)

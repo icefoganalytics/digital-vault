@@ -75,23 +75,29 @@
         </v-col>
       </v-row>
       <v-row class="mb-3">
-        <v-col cols="12" md="4">
+        <v-col
+          cols="12"
+          md="4"
+        >
           <v-text-field
             v-model="search"
             label="Search"
             density="compact"
           />
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col
+          cols="12"
+          md="3"
+        >
           <v-select
-            v-model="search"
+            v-model="source"
             label="Source"
             density="compact"
           />
         </v-col>
         <v-col class="d-flex">
           <v-select
-            v-model="search"
+            v-model="status"
             label="Status"
             density="compact"
           />
@@ -107,13 +113,12 @@
 
       <v-data-table-server
         v-model:items-per-page="perPage"
-        :search="search"
+        :page="page"
         :items="items"
         :items-length="totalCount"
-        :page="page"
         :loading="isLoading"
         :headers="headers"
-        @update:options="loadItems"
+        @update:page="updatePage"
         @click:row="openItem"
       >
         <template #item.calculatedExpireDate="{ item }">
@@ -125,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import { useRouteQuery } from "@vueuse/router"
 
@@ -135,17 +140,14 @@ import { ArchiveItem } from "@/api/archive-items-api"
 import { formatDate } from "@/utils/formatters"
 
 const router = useRouter()
-const { isLoading, items, totalCount, list } = useArchiveItems()
 
 const showDrafts = ref(false)
 const showDue = ref(false)
 const showMine = ref(false)
 
-onMounted(async () => {
-  if (!isLoading.value) await loadItems()
-})
-
 const search = ref()
+const source = ref()
+const status = ref()
 const page = useRouteQuery("page", "1", { transform: Number })
 const perPage = useRouteQuery("perPage", "10", { transform: Number })
 
@@ -153,14 +155,23 @@ const headers = [
   { title: "Title", value: "title" },
   { title: "Description", value: "description" },
   { title: "Status", value: "status" },
+  { title: "Attachments", value: "archiveItemFileCount" },
   { title: "Expires On", value: "calculatedExpireDate" },
 ]
 
 useBreadcrumbs("Archive Items", [BASE_CRUMB])
 
-async function loadItems() {
-  list({ filters: { search: search.value }, page: page.value, perPage: perPage.value })
+function updatePage(newPage: number) {
+  if (isLoading.value) return
+  page.value = newPage
 }
+
+const query = computed(() => {
+  return { filters: { search: search.value }, page: page.value, perPage: perPage.value }
+})
+
+const { items, totalCount, isLoading } = useArchiveItems(query)
+
 function openItem(_event: PointerEvent, { item }: { item: ArchiveItem }) {
   router.push({ name: "archive-item/ArchiveItemViewPage", params: { archiveItemId: item.id } })
 }

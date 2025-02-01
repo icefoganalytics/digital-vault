@@ -7,7 +7,7 @@ import ReferenceSerializer, { UserReferenceView } from "@/serializers/users/refe
 export type ArchiveItemIndexView = Pick<
   ArchiveItem,
   "title" | "description" | "summary" | "securityLevel" | "status"
-> & { user: UserReferenceView | null }
+> & { user: UserReferenceView | null; archiveItemFileCount?: number }
 
 export class IndexSerializer extends BaseSerializer<ArchiveItem> {
   perform(): ArchiveItemIndexView {
@@ -22,6 +22,7 @@ export class IndexSerializer extends BaseSerializer<ArchiveItem> {
         "calculatedExpireDate",
       ]),
       user: this.record.user ? ReferenceSerializer.perform(this.record.user) : null,
+      archiveItemFileCount: this.record.dataValues.archiveItemFileCount,
     }
   }
 }
