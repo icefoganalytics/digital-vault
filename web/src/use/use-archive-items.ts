@@ -46,9 +46,6 @@ export function useArchiveItems(
     () => [skipWatchIf(), unref(queryOptions)],
     async ([skip]) => {
       if (skip) return
-
-      console.log("TT")
-
       await fetch()
     },
     { deep: true, immediate: true }

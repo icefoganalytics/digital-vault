@@ -2,7 +2,6 @@ import { type Ref, reactive, toRefs, unref, watch } from "vue"
 import { isNil } from "lodash"
 
 import archiveItemsApi, { type ArchiveItemCreate, type ArchiveItem } from "@/api/archive-items-api"
-import axios from "axios"
 
 export { type ArchiveItem }
 
