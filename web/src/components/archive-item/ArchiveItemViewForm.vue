@@ -110,17 +110,22 @@
         class="mb-5"
         variant="tonal"
       >
-        <v-card-title>RECORDED {{ formatDateTime(item.createdAt) }}</v-card-title>
+        <v-card-title>
+          <div class="text-subtitle-2 mb-n2 text-grey">RECORDED AT</div>
+          {{ formatDateTime(item.createdAt) }}
+        </v-card-title>
         <v-divider />
         <v-card-text>
           <div v-if="item.sourceId"></div>
           <div v-if="item.userId">
-            <p class="mb-0 text-subtitle-1">BY: {{ item.user?.displayName }}</p>
+            <div class="text-subtitle-2 mb-n1 text-grey">RECORDED BY</div>
+            {{ item.user?.displayName }}
+
             <p
               v-if="item.user?.title"
               class="mb-0"
             >
-              TITLE: {{ item.user?.title }}
+              {{ item.user?.title }}
             </p>
           </div>
         </v-card-text>
