@@ -1,5 +1,9 @@
 <template>
-  <v-card class="bg-secondary mb-4">
+  <v-card
+    class="bg-secondary mb-4"
+    :loading="isLoading"
+    :disabled="isLoading"
+  >
     <v-card-title
       style="font-weight: 400; font-size: 16px"
       :title="file.originalFileName"
@@ -26,6 +30,7 @@
             class="py-0"
             variant="text"
             size="small"
+            :disabled="!canPreview(file.originalMimeType)"
             @click="previewFile()"
             >Preview</v-btn
           >
@@ -63,6 +68,7 @@
             class="py-0"
             variant="text"
             size="small"
+            :disabled="!canPreview(file.pdfMimeType)"
             @click="previewFile(true)"
             >Preview</v-btn
           >
@@ -93,12 +99,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue"
+
 import archiveItemsApi, { ArchiveItemFile } from "@/api/archive-items-api"
 import { getFileIcon } from "@/utils/file-icons"
 import { formatBytes } from "@/utils/formatters"
 import { useDisplay } from "vuetify"
+import usePreview from "@/use/use-preview"
 
 const { lgAndUp } = useDisplay()
+const { canPreview, showPreview } = usePreview()
+
+const isLoading = ref(false)
 
 const props = defineProps<{
   file: ArchiveItemFile
@@ -116,7 +128,7 @@ async function downloadFile(usePDF: boolean = false) {
   link.click()
 }
 
-function previewFile(usePDF: boolean = false) {
-  console.log("Preview file", usePDF)
+async function previewFile(usePdf: boolean = false) {
+  await showPreview(props.file, usePdf)
 }
 </script>
