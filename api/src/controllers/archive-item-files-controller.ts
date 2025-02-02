@@ -29,18 +29,13 @@ export class ArchiveItemFilesController extends BaseController<ArchiveItem> {
       }
 
       const fileId = this.params.fileId.toString()
-
       const selectedFile = archiveItem.files?.find((f) => f.id == parseInt(fileId))
 
       if (selectedFile) {
         const fileService = new FileStorageService()
         const { format } = this.request.query
-        console.log("format", format)
 
         if (format === "protected" && !isNil(selectedFile.pdfKey)) {
-
-          console.log("LOADING",selectedFile.pdfKey)
-
           const fileResponse = await fileService.downloadFile(selectedFile.pdfKey)
           this.response.setHeader(
             "Content-Disposition",
