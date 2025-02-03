@@ -22,6 +22,7 @@ export async function ensureAndAuthorizeCurrentUser(
 ) {
   const user = await User.findOne({
     where: { auth0Subject: req.auth?.sub || "" },
+    include: ["userPermissions"],
   })
 
   if (!isNil(user)) {

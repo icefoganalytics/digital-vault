@@ -16,6 +16,9 @@ export type UserShowView = Pick<
   | "division"
   | "branch"
   | "unit"
+  | "categories"
+  | "sources"
+  | "userPermissions"
   | "deactivatedAt"
   | "createdAt"
   | "updatedAt"
@@ -38,6 +41,9 @@ export class ShowSerializer extends BaseSerializer<User> {
         "division",
         "branch",
         "unit",
+        "categories",
+        "sources",
+        "userPermissions",
         "deactivatedAt",
         "createdAt",
         "updatedAt",

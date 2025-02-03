@@ -2,6 +2,7 @@ import db from "@/db/db-client"
 
 // Models
 import User from "@/models/user"
+import UserPermission from "@/models/user-permission"
 import Source from "@/models/source"
 import Retention from "@/models/retention"
 import Category from "@/models/category"
@@ -12,6 +13,7 @@ import SourceCategory from "@/models/source-category"
 
 db.addModels([
   User,
+  UserPermission,
   ArchiveItem,
   Source,
   Retention,
@@ -23,6 +25,7 @@ db.addModels([
 
 // Lazy load scopes
 User.establishScopes()
+UserPermission.establishScopes()
 ArchiveItem.establishScopes()
 Source.establishScopes()
 Retention.establishScopes()
@@ -33,6 +36,7 @@ SourceCategory.establishScopes()
 
 export {
   User,
+  UserPermission,
   Source,
   ArchiveItem,
   Retention,

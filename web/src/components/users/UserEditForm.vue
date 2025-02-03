@@ -125,15 +125,31 @@
             cols="12"
             md="6"
           >
-            <v-chip
-              v-for="(role, index) in user.roles"
-              :key="index"
-              class="ma-2"
-              color="info"
-              size="large"
-            >
-              {{ formatRole(role) }}
-            </v-chip>
+            <UserRolesSelect v-model="user.roles" />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <CategorySelect
+              v-model="user.categories"
+              label="Categories"
+              multiple
+              chips
+              closable-chips
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <SourceSelect
+              v-model="user.sources"
+              label="Sources"
+              multiple
+              chips
+              closable-chips
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -146,7 +162,7 @@
             >
               Cancel
             </v-btn>
-          <v-spacer />
+            <v-spacer />
             <v-btn
               class="ml-3"
               :loading="isLoading"
@@ -172,6 +188,9 @@ import { type VBtn, type VForm } from "vuetify/lib/components/index.mjs"
 import { required } from "@/utils/validators"
 import useSnack from "@/use/use-snack"
 import useUser from "@/use/use-user"
+import UserRolesSelect from "./UserRolesSelect.vue"
+import CategorySelect from "../categories/CategorySelect.vue"
+import SourceSelect from "../sources/SourceSelect.vue"
 
 type CancelButtonOptions = VBtn["$props"]
 

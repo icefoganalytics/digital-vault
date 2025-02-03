@@ -10,6 +10,7 @@ import {
   Attribute,
   AutoIncrement,
   Default,
+  HasMany,
   Index,
   NotNull,
   PrimaryKey,
@@ -18,6 +19,7 @@ import {
 import { isNil } from "lodash"
 
 import BaseModel from "@/models/base-model"
+import UserPermission from "./user-permission"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum UserRoles {
@@ -113,8 +115,32 @@ export class User extends BaseModel<InferAttributes<User>, InferCreationAttribut
     return this.roles?.some((role) => role === UserRoles.SYSTEM_ADMIN)
   }
 
+  get categories(): NonAttribute<number[]> {
+    if (this.userPermissions) {
+      return this.userPermissions
+        ?.map((permission) => permission.categoryId)
+        .filter((categoryId) => !isNil(categoryId))
+    }
+    return []
+  }
+
+  get sources(): NonAttribute<number[]> {
+    if (this.userPermissions) {
+      return this.userPermissions
+        ?.map((permission) => permission.sourceId)
+        .filter((sourceId) => !isNil(sourceId))
+    }
+    return []
+  }
+
   // Associations
-  // Add as needed
+  @HasMany(() => UserPermission, {
+    foreignKey: "userId",
+    inverse: {
+      as: "user",
+    },
+  })
+  declare userPermissions?: NonAttribute<UserPermission[]>
 
   // Scopes
   static establishScopes(): void {

@@ -86,10 +86,11 @@ watch(
   ([blob, show]) => {
     if (blob && show) {
       previewUrl.value = URL.createObjectURL(blob as Blob)
-    } else {
+    } else if (!show) {
       if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
       previewUrl.value = null
     }
+    console.log("PREVIEW_URL", show, previewUrl.value)
   }
 )
 

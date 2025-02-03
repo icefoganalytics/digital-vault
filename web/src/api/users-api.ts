@@ -26,9 +26,10 @@ export type User = {
 
   // Virtuals
   isActive: boolean
+  categories?: number[]
+  sources?: number[]
 
   // Associations
-  // add as needed
 }
 
 export type UserWhereOptions = {

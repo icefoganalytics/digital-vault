@@ -15,6 +15,7 @@ export class EnsureFromAuth0TokenService extends BaseService {
 
     const existingUser = await User.findOne({
       where: { auth0Subject },
+      include: ["userPermissions"],
     })
 
     if (existingUser) {
@@ -23,6 +24,7 @@ export class EnsureFromAuth0TokenService extends BaseService {
 
     const firstTimeUser = await User.findOne({
       where: { auth0Subject: email },
+      include: ["userPermissions"],
     })
     if (firstTimeUser) {
       await firstTimeUser.update({ auth0Subject })
@@ -38,6 +40,7 @@ export class EnsureFromAuth0TokenService extends BaseService {
     const newUser = await User.findOne({
       where: { auth0Subject },
       rejectOnEmpty: true,
+      include: ["userPermissions"],
     })
     return newUser
   }

@@ -4,8 +4,9 @@ import logger from "@/utils/logger"
 import { User } from "@/models"
 import { UsersPolicy } from "@/policies"
 import { CreateService } from "@/services/users"
-import { IndexSerializer } from "@/serializers/users"
+import { IndexSerializer, ShowSerializer } from "@/serializers/users"
 import BaseController from "@/controllers/base-controller"
+import MergeService from "@/services/user-permissions/merge-service"
 
 export class UsersController extends BaseController<User> {
   async index() {
@@ -19,6 +20,7 @@ export class UsersController extends BaseController<User> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["userPermissions"],
       })
       const serializedUsers = IndexSerializer.perform(users)
       return this.response.json({
@@ -48,8 +50,11 @@ export class UsersController extends BaseController<User> {
           message: "You are not authorized to view this user",
         })
       }
+      const serializedUser = ShowSerializer.perform(user)
 
-      return this.response.json({ user, policy })
+      console.log("USER IS", user)
+
+      return this.response.json({ user: serializedUser, policy })
     } catch (error) {
       logger.error("Error fetching user" + error)
       return this.response.status(400).json({
@@ -94,9 +99,25 @@ export class UsersController extends BaseController<User> {
         })
       }
 
+      MergeService.perform({
+        user,
+        categoryIds: this.request.body.categories,
+        sourceIds: this.request.body.sources,
+      })
+
       const permittedAttributes = policy.permitAttributes(this.request.body)
       await user.update(permittedAttributes)
-      return this.response.json({ user })
+      const updatedUser = await this.loadUser()
+
+      if (isNil(updatedUser)) {
+        return this.response.status(404).json({
+          message: "User not found",
+        })
+      }
+
+      const serializedUser = ShowSerializer.perform(updatedUser)
+
+      return this.response.json({ user: serializedUser })
     } catch (error) {
       logger.error("Error updating user" + error)
       return this.response.status(422).json({
@@ -132,7 +153,9 @@ export class UsersController extends BaseController<User> {
   }
 
   private async loadUser() {
-    return User.findByPk(this.params.id)
+    const user = await User.findByPk(this.params.id, { include: ["userPermissions"] })
+
+    return user
   }
 
   private buildPolicy(user: User = User.build()) {

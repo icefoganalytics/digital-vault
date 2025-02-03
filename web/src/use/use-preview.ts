@@ -1,6 +1,9 @@
 import archiveItemsApi, { ArchiveItemFile } from "@/api/archive-items-api"
 import { isNil } from "lodash"
 import { reactive, toRefs } from "vue"
+import useSnack from "@/use/use-snack"
+
+const snack = useSnack()
 
 // Global state for preview
 const state = reactive<{
@@ -37,9 +40,19 @@ export function usePdfPreview() {
     state.usePdf = usePdf
     state.showDialog = true
 
-    const result = await archiveItemsApi.download(file.archiveItemId, file.id, usePdf)
-    const newBlob = new Blob([result], { type: usePdf ? "application/pdf" : file.originalMimeType })
-    state.previewBlob = newBlob
+    const result = await archiveItemsApi
+      .download(file.archiveItemId, file.id, usePdf)
+      .then((resp) => resp)
+      .catch(() => {})
+
+    if (!result) {
+      snack.error("Failed to load preview")
+    } else {
+      const newBlob = new Blob([result], {
+        type: usePdf ? "application/pdf" : file.originalMimeType,
+      })
+      state.previewBlob = newBlob
+    }
     state.isLoading = false
   }
 

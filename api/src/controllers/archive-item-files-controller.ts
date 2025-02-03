@@ -1,9 +1,10 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile } from "@/models"
+import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
 import { ArchiveItemsPolicy } from "@/policies"
 import BaseController from "@/controllers/base-controller"
 import { isNil } from "lodash"
 import { FileStorageService } from "@/services"
+import { UsersFor } from "@/services/archive-items"
 
 export class ArchiveItemFilesController extends BaseController<ArchiveItem> {
   async show() {
@@ -62,9 +63,14 @@ export class ArchiveItemFilesController extends BaseController<ArchiveItem> {
   }
 
   private async loadArchiveItem() {
-    return ArchiveItem.findByPk(this.params.archiveItemId, {
-      include: [{ model: ArchiveItemFile }],
+    const item = await ArchiveItem.findByPk(this.params.archiveItemId, {
+      include: [{ model: Category }, { model: ArchiveItemFile }],
     })
+    if (isNil(item)) return null
+
+    const users = await UsersFor.perform(item)
+    item.users = users
+    return item
   }
 
   private buildPolicy(archiveItem: ArchiveItem = ArchiveItem.build()) {

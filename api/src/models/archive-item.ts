@@ -162,14 +162,7 @@ export class ArchiveItem extends BaseModel<
   })
   declare categories?: NonAttribute<Category[]>
 
-  @BelongsTo(() => User, {
-    foreignKey: "userId",
-    /* inverse: {
-      as: "decisions",
-      type: "hasMany",
-    }, */
-  })
-  declare user?: NonAttribute<User>
+  declare users?: NonAttribute<User[]>
 
   // Scopes
   static establishScopes(): void {
