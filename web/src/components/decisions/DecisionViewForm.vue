@@ -68,7 +68,13 @@
         <v-card-text>
           <v-row>
             <v-col cols="12">
-              <v-text-field :value="categoryText" />
+              <v-select
+                v-model="categoryNames"
+                label="Categories"
+                multiple
+                chips
+                readonly
+              />
             </v-col>
             <v-col cols="12">
               <v-combobox
@@ -81,28 +87,6 @@
             </v-col>
           </v-row>
         </v-card-text>
-
-        <v-card-title>Attachments</v-card-title>
-        <v-card-text v-if="item.files && item.files.length > 0">
-          <v-row>
-            <v-col
-              v-for="file of item.files"
-              :key="file.id"
-              cols="12"
-              md="3"
-            >
-              <v-card class="bg-secondary fill-height">
-                <v-card-text>
-                  <p>
-                    {{ file.originalFileName }}
-                  </p>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
     </v-col>
     <v-col
@@ -111,29 +95,48 @@
     >
       <h2 class="mb-3">Decision</h2>
       <v-card
-        variant="tonal"
         class="mb-5"
+        variant="tonal"
       >
-        <v-card-title>Recorded {{ formatDateTime(item.createdAt) }}</v-card-title>
+        <v-card-title>
+          <div class="text-subtitle-2 mb-n2 text-grey">RECORDED AT</div>
+          {{ formatDateTime(item.createdAt) }}
+        </v-card-title>
+        <v-divider />
         <v-card-text>
-          <p class="mb-0 text-subtitle-1">By: {{ item.user?.displayName }}</p>
-          <p
-            v-if="item.user?.title"
-            class="mb-5"
+          <div v-if="item.sourceId"></div>
+          <div v-if="item.userId">
+            <div class="text-subtitle-2 mb-n1 text-grey">RECORDED BY</div>
+            {{ item.user?.displayName }}
+
+            <p
+              v-if="item.user?.title"
+              class="mb-0"
+            >
+              {{ item.user?.title }}
+            </p>
+          </div>
+          <v-btn
+            color="info"
+            class="mt-5"
+            readonly
+            block
+            >{{ item.decisionText }}</v-btn
           >
-            {{ item.user?.title }}
-          </p>
-          <v-row>
-            <v-col cols="12">
-              <v-btn
-                color="info"
-                readonly
-                block
-                >{{ item.decisionText }}</v-btn
-              >
-            </v-col>
-          </v-row>
         </v-card-text>
+      </v-card>
+
+      <v-card>
+        <v-card-title>Attachments</v-card-title>
+        <v-card-text v-if="item.files && item.files.length > 0">
+          <div
+            v-for="file of item.files"
+            :key="file.id"
+          >
+            <ArchiveItemFileCard :file="file" />
+          </div>
+        </v-card-text>
+        <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
     </v-col>
   </v-row>
@@ -153,13 +156,11 @@ const props = defineProps<{
 const decisionId = computed(() => (props.decisionId ? parseInt(props.decisionId) : null))
 const { item } = useDecision(decisionId)
 
-const categoryText = computed(() => {
-  if (item.value && item.value.categories && item.value.categories.length > 0) {
-    const category = item.value.categories[0].name
-    return `${category}`
+const categoryNames = computed(() => {
+  if (item.value && item.value.categories) {
+    return item.value.categories.map((c) => c.name)
   }
-
-  return ""
+  return []
 })
 
 useBreadcrumbs("Decision Record", [

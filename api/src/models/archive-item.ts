@@ -157,6 +157,9 @@ export class ArchiveItem extends BaseModel<
   })
   declare files?: NonAttribute<ArchiveItemFile[]>
 
+  @BelongsTo(() => User, { foreignKey: "userId" })
+  declare user?: NonAttribute<User>
+
   @BelongsToMany(() => Category, {
     through: { model: ArchiveItemCategory },
   })

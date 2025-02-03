@@ -3,10 +3,15 @@ import { Attributes, FindOptions } from "@sequelize/core"
 import { Path } from "@/utils/deep-pick"
 import { ArchiveItem, User } from "@/models"
 import { PolicyFactory } from "@/policies/base-policy"
+import { isUndefined } from "lodash"
 
 export class DecisionPolicy extends PolicyFactory(ArchiveItem) {
   show(): boolean {
-    return true
+    if (this.users.some((user) => user.id === this.user.id)) {
+      return true
+    }
+
+    return false
   }
 
   create(): boolean {
@@ -60,6 +65,13 @@ export class DecisionPolicy extends PolicyFactory(ArchiveItem) {
 
   static policyScope(_user: User): FindOptions<Attributes<ArchiveItem>> {
     return {}
+  }
+  private get users(): User[] {
+    if (isUndefined(this.record.users)) {
+      throw new Error("Expected record to have a users association")
+    }
+
+    return this.record.users
   }
 }
 

@@ -1,10 +1,11 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile, Category, User } from "@/models"
+import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
 import { DecisionPolicy } from "@/policies"
 import { IndexSerializer } from "@/serializers/decisions"
 import BaseController from "@/controllers/base-controller"
 import { CreateService } from "@/services/decisions"
 import { isNil } from "lodash"
+import { UsersFor } from "@/services/archive-items"
 
 export class DecisionsController extends BaseController<ArchiveItem> {
   async index() {
@@ -86,9 +87,14 @@ export class DecisionsController extends BaseController<ArchiveItem> {
   }
 
   private async loadArchiveItem() {
-    return ArchiveItem.findByPk(this.params.id, {
-      include: [{ model: Category }, { model: ArchiveItemFile }, { model: User }],
+    const item = await ArchiveItem.findByPk(this.params.id, {
+      include: [{ model: Category }, { model: ArchiveItemFile }, "user"],
     })
+    if (isNil(item)) return null
+
+    const users = await UsersFor.perform(item)
+    item.users = users
+    return item
   }
 
   private buildPolicy(decision: ArchiveItem = ArchiveItem.build()) {
