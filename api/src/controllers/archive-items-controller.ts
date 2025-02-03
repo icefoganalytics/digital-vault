@@ -105,7 +105,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
 
   private async loadArchiveItem() {
     const item = await ArchiveItem.findByPk(this.params.id, {
-      include: [{ model: Category }, { model: ArchiveItemFile }, "user"],
+      include: [{ model: Category }, { model: ArchiveItemFile }, "user", "source"],
     })
     if (isNil(item)) return null
     item.users = await UsersFor.perform(item)

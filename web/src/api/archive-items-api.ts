@@ -3,6 +3,7 @@ import { type Policy } from "@/api/base-api"
 import { GenericFormData } from "axios"
 import { Category } from "./categories-api"
 import { User } from "./users-api"
+import { Source } from "./sources-api"
 
 export enum SecurityLevel {
   LOW = 1,
@@ -38,6 +39,7 @@ export type ArchiveItem = {
   categories: Category[] | null
   files: ArchiveItemFile[] | null
   user: User | null
+  source: Source | null
   users: User[] | null
   permittedUsers: User[] | null
 }

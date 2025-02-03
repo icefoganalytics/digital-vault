@@ -102,7 +102,7 @@ const rules = {
 
   email(value: string | null) {
     if (isNil(value) || isEmpty(value)) return true
-    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+    if (/^[0-9a-z.-]+@[0-9a-z.-]+\.[a-z]+$/i.test(value)) return true
     return "Must be a valid e-mail."
   },
 }

@@ -24,6 +24,7 @@ import ArchiveItemFile from "@/models/archive-item-file"
 import Category from "./category"
 import ArchiveItemCategory from "./archive-item-category"
 import User from "./user"
+import Source from "./source";
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum SecurityLevel {
@@ -64,7 +65,7 @@ export class ArchiveItem extends BaseModel<
 
   @Attribute(DataTypes.DATE(0))
   @NotNull
-  declare calculatedExpireDate: Date
+  declare calculatedExpireDate: Date | string
 
   @Attribute(DataTypes.DATE(0))
   declare overrideExpireDate: Date | null
@@ -159,6 +160,9 @@ export class ArchiveItem extends BaseModel<
 
   @BelongsTo(() => User, { foreignKey: "userId" })
   declare user?: NonAttribute<User>
+
+  @BelongsTo(() => Source, { foreignKey: "sourceId" })
+  declare source?: NonAttribute<Source>
 
   @BelongsToMany(() => Category, {
     through: { model: ArchiveItemCategory },

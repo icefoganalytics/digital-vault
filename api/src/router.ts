@@ -24,6 +24,7 @@ import {
   CategoriesController,
   CurrentUserController,
   DecisionsController,
+  IntegrationController,
   RetentionsController,
   SourcesController,
   UsersController,
@@ -40,6 +41,8 @@ router.route("/_status").get((_req: Request, res: Response) => {
 })
 
 router.use("/migrate", migrator.migrationRouter)
+
+router.route("/api/integrations/:sourceId").post(IntegrationController.create)
 
 // api routes
 router.use("/api", jwtMiddleware, ensureAndAuthorizeCurrentUser)

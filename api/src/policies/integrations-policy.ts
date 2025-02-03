@@ -3,18 +3,16 @@ import { Attributes, FindOptions } from "@sequelize/core"
 import { Path } from "@/utils/deep-pick"
 import { ArchiveItem, User } from "@/models"
 import { PolicyFactory } from "@/policies/base-policy"
-import { isUndefined } from "lodash"
+import { isNil, isUndefined } from "lodash"
 
-export class DecisionPolicy extends PolicyFactory(ArchiveItem) {
+export class IntegrationsPolicy extends PolicyFactory(ArchiveItem) {
   show(): boolean {
-    if (this.users.some((user) => user.id === this.user?.id)) {
-      return true
-    }
-
     return false
   }
 
   create(): boolean {
+    if (isNil(this.source)) return false
+
     return true
   }
 
@@ -28,27 +26,15 @@ export class DecisionPolicy extends PolicyFactory(ArchiveItem) {
 
   permittedAttributes(): Path[] {
     const attributes: (keyof Attributes<ArchiveItem>)[] = [
-      "retentionName",
-      "calculatedExpireDate",
-      "overrideExpireDate",
-      "expireAction",
-      "sourceId",
-      "userId",
       "title",
       "description",
       "decisionText",
       "isDecision",
       "summary",
-      "status",
       "securityLevel",
       "tags",
       "submittedAt",
     ]
-
-    /* if (this.user.isSystemAdmin) {
-      attributes.push("email", "roles", "deactivatedAt")
-    } */
-
     return attributes
   }
 
@@ -68,4 +54,4 @@ export class DecisionPolicy extends PolicyFactory(ArchiveItem) {
   }
 }
 
-export default DecisionPolicy
+export default IntegrationsPolicy

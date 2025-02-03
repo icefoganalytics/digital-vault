@@ -7,7 +7,7 @@ import { isUndefined } from "lodash"
 
 export class ArchiveItemsPolicy extends PolicyFactory(ArchiveItem) {
   show(): boolean {
-    if (this.users.some((user) => user.id === this.user.id)) {
+    if (this.users.some((user) => user.id === this.user?.id)) {
       return true
     }
 

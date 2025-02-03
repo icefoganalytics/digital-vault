@@ -16,7 +16,7 @@
           v-for="(audit, idx) of items"
           :key="audit.id"
           :title="formatDateTime(audit.createdAt)"
-          :subtitle="`${audit.user?.displayName} - ${audit.user?.department ?? 'Unknown department'}`"
+          :subtitle="makeSubtitle(audit)"
           class="py-2"
           :class="{ 'border-bottom': idx < items.length - 1 }"
         >
@@ -40,6 +40,7 @@ import { isNil } from "lodash"
 
 import useArchiveItemAudits from "@/use/use-archive-item-audits"
 import { formatDateTime } from "@/utils/formatters"
+import { ArchiveItemAudit } from "@/api/archive-item-audits-api"
 
 const props = defineProps<{ itemId: number }>()
 const archiveItemId = computed(() => props.itemId)
@@ -55,6 +56,13 @@ const query = computed(() => {
 })
 
 const { items, totalCount, isLoading, fetch } = useArchiveItemAudits(archiveItemId.value, query)
+
+function makeSubtitle(item: ArchiveItemAudit): string {
+  if (item.user) {
+    return `${item.user?.displayName} - ${item.user?.department ?? "Unknown department"}`
+  }
+  return item.description ?? ""
+}
 
 function reload() {
   page.value = 1
