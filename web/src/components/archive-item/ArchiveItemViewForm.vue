@@ -100,7 +100,7 @@
           />
         </v-card-text>
       </v-card>
-      
+
       <ArchiveItemAccessCard :item="item" />
     </v-col>
 
@@ -133,26 +133,32 @@
         </v-card-text>
       </v-card>
 
-      <v-card>
+      <v-card class="mb-5">
         <v-card-title>Attachments</v-card-title>
         <v-card-text v-if="item.files && item.files.length > 0">
           <div
             v-for="file of item.files"
             :key="file.id"
           >
-            <ArchiveItemFileCard :file="file" />
+            <ArchiveItemFileCard
+              :file="file"
+              @reload-audit="reloadAudit"
+            />
           </div>
         </v-card-text>
         <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
 
-      <ArchiveItemAuditCard :item-id="item.id" />
+      <ArchiveItemAuditCard
+        ref="auditCard"
+        :item-id="item.id"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, ref } from "vue"
 
 import useArchiveItem from "@/use/use-archive-item"
 import { formatDate, formatDateTime } from "@/utils/formatters"
@@ -166,6 +172,7 @@ const props = defineProps<{
   archiveItemId: string
 }>()
 
+const auditCard = ref<typeof ArchiveItemAuditCard>()
 const archiveItemId = computed(() => (props.archiveItemId ? parseInt(props.archiveItemId) : null))
 
 const { item } = useArchiveItem(archiveItemId)
@@ -176,4 +183,8 @@ const categoryNames = computed(() => {
   }
   return []
 })
+
+function reloadAudit() {
+  auditCard.value?.reload()
+}
 </script>

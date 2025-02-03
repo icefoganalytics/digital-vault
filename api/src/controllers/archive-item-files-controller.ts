@@ -1,5 +1,5 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
+import { ArchiveItem, ArchiveItemAudit, ArchiveItemFile, Category } from "@/models"
 import { ArchiveItemsPolicy } from "@/policies"
 import BaseController from "@/controllers/base-controller"
 import { isNil } from "lodash"
@@ -35,6 +35,13 @@ export class ArchiveItemFilesController extends BaseController<ArchiveItem> {
       if (selectedFile) {
         const fileService = new FileStorageService()
         const { format } = this.request.query
+
+        await ArchiveItemAudit.create({
+          archiveItemId: archiveItem.id,
+          archiveItemFileId: selectedFile.id,
+          action: `Viewed ${selectedFile.originalFileName}`,
+          userId: this.currentUser.id,
+        })
 
         if (format === "protected" && !isNil(selectedFile.pdfKey)) {
           const fileResponse = await fileService.downloadFile(selectedFile.pdfKey)

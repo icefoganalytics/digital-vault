@@ -1,34 +1,61 @@
 <template>
-  <v-card>
-    <v-card-title>Audit History</v-card-title>
-    <v-card-text v-if="!isNil(item.permittedUsers) && item.permittedUsers.length > 0">
+  <v-card :loading="isLoading">
+    <v-card-title>Audit History ({{ totalCount }})</v-card-title>
+    <v-card-text v-if="!isNil(items) && items.length > 0">
       <v-list
         class="py-0"
         style="border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 4px"
       >
         <v-list-item
-          v-for="(user, idx) of item.permittedUsers"
-          :key="user.id"
-          :title="`${user.displayName} : ${user.email}`"
-          :subtitle="`${user.department ?? 'Unknown department'} - ${user.title ?? 'Unknown title'}`"
+          v-for="(audit, idx) of items"
+          :key="audit.id"
+          :title="formatDateTime(audit.createdAt)"
+          :subtitle="`${audit.user?.displayName} - ${audit.user?.department ?? 'Unknown department'}`"
           class="py-2"
-          :class="{ 'border-bottom': idx < item.permittedUsers.length - 1 }"
+          :class="{ 'border-bottom': idx < items.length - 1 }"
         >
+          {{ audit.action }}
         </v-list-item>
       </v-list>
+
+      <v-pagination
+        v-model="page"
+        density="compact"
+        :length="pageCount"
+      />
     </v-card-text>
-    <v-card-text v-else>No users have access to this item</v-card-text>
+    <v-card-text v-else>No audit history</v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from "vue"
 import { isNil } from "lodash"
 
-defineProps<{ itemId: number }>()
+import useArchiveItemAudits from "@/use/use-archive-item-audits"
+import { formatDateTime } from "@/utils/formatters"
 
-import {audits} from "@/api/audits-api"
+const props = defineProps<{ itemId: number }>()
+const archiveItemId = computed(() => props.itemId)
 
+defineExpose({ reload })
+
+const page = ref(1)
+const perPage = ref(3)
+const pageCount = computed(() => Math.ceil(totalCount.value / perPage.value))
+
+const query = computed(() => {
+  return { filters: {}, page: page.value, perPage: perPage.value }
+})
+
+const { items, totalCount, isLoading, fetch } = useArchiveItemAudits(archiveItemId.value, query)
+
+function reload() {
+  page.value = 1
+  fetch()
+}
 </script>
+
 <style>
 .border-bottom {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);

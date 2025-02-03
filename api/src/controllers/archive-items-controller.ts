@@ -1,5 +1,5 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
+import { ArchiveItem, ArchiveItemAudit, ArchiveItemFile, Category } from "@/models"
 import { ArchiveItemsPolicy } from "@/policies"
 import { IndexSerializer, ShowSerializer } from "@/serializers/archive-items"
 import BaseController from "@/controllers/base-controller"
@@ -52,6 +52,13 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
         currentUser: this.request.currentUser,
       })
 
+      await ArchiveItemAudit.create({
+        archiveItemId: archiveItem.id,
+        action: "Created",
+        userId: this.currentUser.id,
+        description: `${this.currentUser.displayName} created item`,
+      })
+
       return this.response.status(201).json({ archiveItem })
     } catch (error) {
       logger.error("Error creating archive item" + error)
@@ -79,6 +86,13 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
 
       console.log("archiveItem", archiveItem.users?.length)
       const serializedItem = ShowSerializer.perform(archiveItem)
+
+      await ArchiveItemAudit.create({
+        archiveItemId: archiveItem.id,
+        action: "Viewed Metadata",
+        userId: this.currentUser.id,
+        description: `${this.currentUser.displayName} viewed metadata`,
+      })
 
       return this.response.json({ archiveItem: serializedItem, policy })
     } catch (error) {

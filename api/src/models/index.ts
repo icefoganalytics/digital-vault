@@ -7,6 +7,7 @@ import Source from "@/models/source"
 import Retention from "@/models/retention"
 import Category from "@/models/category"
 import ArchiveItem from "@/models/archive-item"
+import ArchiveItemAudit from "./archive-item-audit"
 import ArchiveItemCategory from "@/models/archive-item-category"
 import ArchiveItemFile from "@/models/archive-item-file"
 import SourceCategory from "@/models/source-category"
@@ -18,6 +19,7 @@ db.addModels([
   Source,
   Retention,
   Category,
+  ArchiveItemAudit,
   ArchiveItemCategory,
   ArchiveItemFile,
   SourceCategory,
@@ -31,6 +33,7 @@ Source.establishScopes()
 Retention.establishScopes()
 Category.establishScopes()
 ArchiveItemCategory.establishScopes()
+ArchiveItemAudit.establishScopes()
 ArchiveItemFile.establishScopes()
 SourceCategory.establishScopes()
 
@@ -42,6 +45,7 @@ export {
   Retention,
   Category,
   ArchiveItemCategory,
+  ArchiveItemAudit,
   ArchiveItemFile,
   SourceCategory,
 }

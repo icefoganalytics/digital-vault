@@ -18,6 +18,7 @@ import migrator from "@/db/migrator"
 import { jwtMiddleware, ensureAndAuthorizeCurrentUser } from "@/middlewares"
 
 import {
+  ArchiveItemAuditsController,
   ArchiveItemFilesController,
   ArchiveItemsController,
   CategoriesController,
@@ -85,6 +86,7 @@ router
   .delete(ArchiveItemsController.destroy)
 
 router.route("/api/archive-items/:archiveItemId/files/:fileId").get(ArchiveItemFilesController.show)
+router.route("/api/archive-items/:archiveItemId/audits").get(ArchiveItemAuditsController.index)
 
 router.route("/api/decisions").get(DecisionsController.index).post(DecisionsController.create)
 router

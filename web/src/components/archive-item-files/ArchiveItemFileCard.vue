@@ -109,7 +109,7 @@ import usePreview from "@/use/use-preview"
 
 const { lgAndUp } = useDisplay()
 const { canPreview, showPreview } = usePreview()
-
+const emit = defineEmits(["reloadAudit"])
 const isLoading = ref(false)
 
 const props = defineProps<{
@@ -126,9 +126,12 @@ async function downloadFile(usePDF: boolean = false) {
   link.href = objUrl
   link.download = (usePDF ? props.file.pdfFileName : props.file.originalFileName) || "download"
   link.click()
+
+  emit("reloadAudit")
 }
 
 async function previewFile(usePdf: boolean = false) {
   await showPreview(props.file, usePdf)
+  emit("reloadAudit")
 }
 </script>
