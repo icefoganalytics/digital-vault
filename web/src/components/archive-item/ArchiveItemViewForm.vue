@@ -4,7 +4,7 @@
       cols="12"
       md="8"
     >
-      <v-card>
+      <v-card class="mb-5">
         <v-card-title>Archive Item Description</v-card-title>
         <v-card-text>
           <v-row>
@@ -100,6 +100,8 @@
           />
         </v-card-text>
       </v-card>
+      
+      <ArchiveItemAccessCard :item="item" />
     </v-col>
 
     <v-col
@@ -133,7 +135,6 @@
 
       <v-card>
         <v-card-title>Attachments</v-card-title>
-
         <v-card-text v-if="item.files && item.files.length > 0">
           <div
             v-for="file of item.files"
@@ -142,9 +143,10 @@
             <ArchiveItemFileCard :file="file" />
           </div>
         </v-card-text>
-
         <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
+
+      <ArchiveItemAuditCard :item-id="item.id" />
     </v-col>
   </v-row>
 </template>
@@ -157,6 +159,8 @@ import { formatDate, formatDateTime } from "@/utils/formatters"
 
 import SecurityLevelSelect from "@/components/archive-item/SecurityLevelSelect.vue"
 import ArchiveItemFileCard from "@/components/archive-item-files/ArchiveItemFileCard.vue"
+import ArchiveItemAccessCard from "./ArchiveItemAccessCard.vue"
+import ArchiveItemAuditCard from "./ArchiveItemAuditCard.vue"
 
 const props = defineProps<{
   archiveItemId: string

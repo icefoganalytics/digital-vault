@@ -38,6 +38,8 @@ export type ArchiveItem = {
   categories: Category[] | null
   files: ArchiveItemFile[] | null
   user: User | null
+  users: User[] | null
+  permittedUsers: User[] | null
 }
 
 export type ArchiveItemFile = {

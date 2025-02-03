@@ -64,7 +64,7 @@ export class ArchiveItemsPolicy extends PolicyFactory(ArchiveItem) {
   static policyScope(user: User): FindOptions<Attributes<ArchiveItem>> {
     const idQuery = ArchiveItemsPolicy.makePermissionQuery(user)
     return {
-      where: sql`id IN (${sql.literal(idQuery)})`,
+      where: sql`[ArchiveItem].id IN (${sql.literal(idQuery)})`,
     }
   }
 

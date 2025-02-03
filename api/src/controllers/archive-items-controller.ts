@@ -1,7 +1,7 @@
 import logger from "@/utils/logger"
 import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
 import { ArchiveItemsPolicy } from "@/policies"
-import { IndexSerializer } from "@/serializers/archive-items"
+import { IndexSerializer, ShowSerializer } from "@/serializers/archive-items"
 import BaseController from "@/controllers/base-controller"
 import { CreateService, UsersFor } from "@/services/archive-items"
 import { isNil } from "lodash"
@@ -18,6 +18,7 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
         where,
         limit: this.pagination.limit,
         offset: this.pagination.offset,
+        include: ["user"],
       })
 
       const serializedItems = IndexSerializer.perform(archiveItems)
@@ -76,7 +77,10 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
         })
       }
 
-      return this.response.json({ archiveItem, policy })
+      console.log("archiveItem", archiveItem.users?.length)
+      const serializedItem = ShowSerializer.perform(archiveItem)
+
+      return this.response.json({ archiveItem: serializedItem, policy })
     } catch (error) {
       logger.error("Error fetching item" + error)
       return this.response.status(400).json({
@@ -87,12 +91,10 @@ export class ArchiveItemsController extends BaseController<ArchiveItem> {
 
   private async loadArchiveItem() {
     const item = await ArchiveItem.findByPk(this.params.id, {
-      include: [{ model: Category }, { model: ArchiveItemFile }],
+      include: [{ model: Category }, { model: ArchiveItemFile }, "user"],
     })
     if (isNil(item)) return null
-
-    const users = await UsersFor.perform(item)
-    item.users = users
+    item.users = await UsersFor.perform(item)
     return item
   }
 

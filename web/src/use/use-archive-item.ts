@@ -33,7 +33,10 @@ export function useArchiveItem(id: Ref<number | null | undefined>) {
       state.item = archiveItem
       return archiveItem
     } catch (error) {
-      console.error("Failed to fetch category:", error)
+      console.error("Failed to fetch arhive item:", error)
+
+      
+
       state.isErrored = true
       throw error
     } finally {
