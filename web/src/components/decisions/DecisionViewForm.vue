@@ -126,7 +126,7 @@
         </v-card-text>
       </v-card>
 
-      <v-card>
+      <v-card class="mb-5">
         <v-card-title>Attachments</v-card-title>
         <v-card-text v-if="item.files && item.files.length > 0">
           <div
@@ -138,6 +138,11 @@
         </v-card-text>
         <v-card-text v-else> No Attachments </v-card-text>
       </v-card>
+
+      <ArchiveItemAuditCard
+        ref="auditCard"
+        :item-id="item.id"
+      />
     </v-col>
   </v-row>
 </template>
@@ -148,6 +153,7 @@ import { computed } from "vue"
 import useBreadcrumbs, { BASE_CRUMB } from "@/use/use-breadcrumbs"
 import useDecision from "@/use/use-decision"
 import { formatDate, formatDateTime } from "@/utils/formatters"
+import ArchiveItemAuditCard from "../archive-item/ArchiveItemAuditCard.vue"
 
 const props = defineProps<{
   decisionId: string

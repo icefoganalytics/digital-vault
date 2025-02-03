@@ -53,10 +53,13 @@
           style="border: 1px black solid; margin-right: 10px; width: 100%; height: 100%"
         />
         <img
-          v-if="previewUrl && isImagePreview"
+          v-else-if="previewUrl && isImagePreview"
           :src="previewUrl"
           style="border: 1px black solid; margin-right: 10px; width: 100%; height: 100%"
         />
+        <div v-else-if="!isLoading">
+          Sorry, no preview available, use download button to download the file.
+        </div>
       </v-card-text>
       <div class="d-none">PREVIEW_URL: {{ previewUrl }}</div>
     </v-card>
@@ -95,11 +98,11 @@ watch(
 )
 
 const isPdfPreview = computed(() => {
-  return usePdf.value === true || file?.value?.originalMimeType.includes("pdf")
+  return (usePdf.value === true || file?.value?.originalMimeType.includes("pdf")) ?? false
 })
 
 const isImagePreview = computed(() => {
-  return usePdf.value === false && file?.value?.originalMimeType.includes("image")
+  return (usePdf.value === false && file?.value?.originalMimeType.includes("image")) ?? false
 })
 
 async function downloadClick() {

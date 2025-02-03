@@ -1,6 +1,12 @@
 <template>
   <v-card :loading="isLoading">
-    <v-card-title>Audit History ({{ totalCount }})</v-card-title>
+    <v-card-title
+      >Audit History
+      <small>
+        ({{ page * perPage - perPage + 1 }} - {{ Math.min(totalCount, page * perPage) }} of
+        {{ totalCount }})
+      </small>
+    </v-card-title>
     <v-card-text v-if="!isNil(items) && items.length > 0">
       <v-list
         class="py-0"

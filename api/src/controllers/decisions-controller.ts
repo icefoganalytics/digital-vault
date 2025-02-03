@@ -1,5 +1,5 @@
 import logger from "@/utils/logger"
-import { ArchiveItem, ArchiveItemFile, Category } from "@/models"
+import { ArchiveItem, ArchiveItemAudit, ArchiveItemFile, Category } from "@/models"
 import { DecisionPolicy } from "@/policies"
 import { IndexSerializer } from "@/serializers/decisions"
 import BaseController from "@/controllers/base-controller"
@@ -52,6 +52,13 @@ export class DecisionsController extends BaseController<ArchiveItem> {
         currentUser: this.request.currentUser,
       })
 
+      await ArchiveItemAudit.create({
+        archiveItemId: archiveItem.id,
+        action: "Created",
+        userId: this.currentUser.id,
+        description: `${this.currentUser.displayName} created decision`,
+      })
+
       return this.response.status(201).json({ archiveItem })
     } catch (error) {
       logger.error("Error creating archive item" + error)
@@ -76,6 +83,13 @@ export class DecisionsController extends BaseController<ArchiveItem> {
           message: "You are not authorized to view this item",
         })
       }
+
+      await ArchiveItemAudit.create({
+        archiveItemId: decision.id,
+        action: "Viewed Metadata",
+        userId: this.currentUser.id,
+        description: `${this.currentUser.displayName} viewed metadata`,
+      })
 
       return this.response.json({ decision, policy })
     } catch (error) {
