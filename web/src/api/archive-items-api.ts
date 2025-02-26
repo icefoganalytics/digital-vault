@@ -76,7 +76,8 @@ export type ArchiveItemCreate = {
 }
 
 export type ArchiveItemWhereOptions = {
-  name?: string
+  expiringSoon? : boolean | null
+  status?: string
 }
 
 export type ArchiveItemFiltersOptions = {

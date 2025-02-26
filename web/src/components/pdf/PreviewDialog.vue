@@ -57,7 +57,7 @@
           :src="previewUrl"
           style="border: 1px black solid; margin-right: 10px; width: 100%; height: 100%"
         />
-        <div v-else-if="!isLoading">
+        <div v-else-if="!isLoading" class="ml-2">
           Sorry, no preview available, use download button to download the file.
         </div>
       </v-card-text>
@@ -89,6 +89,9 @@ watch(
   ([blob, show]) => {
     if (blob && show) {
       previewUrl.value = URL.createObjectURL(blob as Blob)
+
+      console.log("BLOB", (blob as Blob).type)
+
     } else if (!show) {
       if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
       previewUrl.value = null

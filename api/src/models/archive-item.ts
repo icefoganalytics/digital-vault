@@ -24,7 +24,7 @@ import ArchiveItemFile from "@/models/archive-item-file"
 import Category from "./category"
 import ArchiveItemCategory from "./archive-item-category"
 import User from "./user"
-import Source from "./source";
+import Source from "./source"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum SecurityLevel {
@@ -176,6 +176,7 @@ export class ArchiveItem extends BaseModel<
     this.addSearchScope(["title", "description", "tags"])
     this.addScope("DecisionsOnly", { where: { isDecision: true } })
     this.addScope("ArchiveItemsOnly", { where: { isDecision: false } })
+    this.addScope("ExpiringSoon", { where: { status: "Expiring Soon" } })
 
     const tableAlias = sql.literal(this.name)
     this.addScope("withArchiveItemFileCounts", {

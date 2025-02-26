@@ -167,7 +167,12 @@ function updatePage(newPage: number) {
 }
 
 const query = computed(() => {
-  return { filters: { search: search.value }, page: page.value, perPage: perPage.value }
+  return {
+    filters: { search: search.value },
+    where: { status: showDue.value ? "Expiring Soon" : undefined },
+    page: page.value,
+    perPage: perPage.value,
+  }
 })
 
 const { items, totalCount, isLoading } = useArchiveItems(query)
