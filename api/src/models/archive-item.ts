@@ -173,7 +173,7 @@ export class ArchiveItem extends BaseModel<
 
   // Scopes
   static establishScopes(): void {
-    this.addSearchScope(["title", "tags"])
+    this.addSearchScope(["title", "description", "tags"])
     this.addScope("DecisionsOnly", { where: { isDecision: true } })
     this.addScope("ArchiveItemsOnly", { where: { isDecision: false } })
 
