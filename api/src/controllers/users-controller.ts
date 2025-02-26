@@ -52,8 +52,6 @@ export class UsersController extends BaseController<User> {
       }
       const serializedUser = ShowSerializer.perform(user)
 
-      console.log("USER IS", user)
-
       return this.response.json({ user: serializedUser, policy })
     } catch (error) {
       logger.error("Error fetching user" + error)
