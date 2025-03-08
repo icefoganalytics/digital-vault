@@ -1,8 +1,11 @@
 import { Knex } from "knex"
-
-import { ArchiveItem, ArchiveItemCategory, Category, Retention, Source } from "@/models"
-import { ArchiveItemStatus, SecurityLevel } from "@/models/archive-item"
+import { isNil } from "lodash"
 import { DateTime } from "luxon"
+
+import { ArchiveItem, ArchiveItemCategory, Category, Source } from "@/models"
+import { ArchiveItemStatus, SecurityLevel } from "@/models/archive-item"
+
+import logger from "@/utils/logger"
 
 export async function seed(_knex: Knex): Promise<void> {
   const source1 = await Source.findOne({
@@ -24,7 +27,7 @@ export async function seed(_knex: Knex): Promise<void> {
     rejectOnEmpty: true,
   })
 
-  const item = await ArchiveItem.create({
+  const archiveItemAttributes = {
     title: "Testing",
     status: ArchiveItemStatus.ACCEPTED,
     securityLevel: SecurityLevel.LOW,
@@ -34,23 +37,36 @@ export async function seed(_knex: Knex): Promise<void> {
     tags: ["Finance", "Testing"],
     sourceId: source1.id,
     isDecision: false,
+  }
+
+  let archiveItem = await ArchiveItem.findOne({
+    where: {
+      sourceId: source1.id,
+    },
   })
 
-  await ArchiveItemCategory.create({
-    archiveItemId: item.id,
-    categoryId: category1.id,
-    setBySourceId: source1.id,
-  })
-  await ArchiveItemCategory.create({
-    archiveItemId: item.id,
-    categoryId: category2.id,
-    setBySourceId: source1.id,
-  })
+  if (isNil(archiveItem)) {
+    archiveItem = await ArchiveItem.create(archiveItemAttributes)
 
-  const inserted = await item.reload({ include: [{ model: Category, include: Retention }] })
+    await ArchiveItemCategory.create({
+      archiveItemId: archiveItem.id,
+      categoryId: category1.id,
+      setBySourceId: source1.id,
+    })
 
-  console.log(inserted.dataValues)
-  console.log(inserted.categories?.map((c) => c.dataValues))
+    await ArchiveItemCategory.create({
+      archiveItemId: archiveItem.id,
+      categoryId: category2.id,
+      setBySourceId: source1.id,
+    })
+
+    logger.debug("ArchiveItem created with categories.")
+  } else {
+    await archiveItem.update(archiveItemAttributes)
+    logger.debug("ArchiveItem updated.")
+  }
+
+  // const inserted = await archiveItem.reload({ include: [{ model: Category, include: Retention }] })
 
   // item.
 

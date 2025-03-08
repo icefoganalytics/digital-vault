@@ -1,25 +1,35 @@
 FROM node:20.18.0-alpine3.19
 
-# Install Java (OpenJDK)
-RUN apk add --no-cache openjdk11
-
-# Set JAVA_HOME environment variable
-ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
-ENV PATH="$JAVA_HOME/bin:$PATH"
-
-# Install iText SDK (you'll need to have the iText JAR file or download it)
-# Here, I’m assuming you have the JAR file available locally or at a specific URL
-
-# COPY or ADD the iText JAR file
-# For example, if it's local:
-COPY path/to/itextpdf-7.x.x.jar /app/libs/
-
-# If it's from a URL, you can use wget or curl
-# RUN wget -O /app/libs/itextpdf-7.x.x.jar http://example.com/itextpdf-7.x.x.jar
-
 RUN npm install -g npm@10.9.0
 
-WORKDIR /usr/src/api
+RUN apk add --no-cache \
+  openjdk21 \
+  libreoffice \
+  curl
+
+# Font configuration (https://stackoverflow.com/questions/56937689/how-to-install-fonts-in-docker)
+WORKDIR /root/fonts
+
+RUN apk add --no-cache msttcorefonts-installer fontconfig
+RUN update-ms-fonts
+RUN apk add ttf-freefont font-terminus font-inconsolata font-dejavu font-noto font-noto-cjk font-awesome font-noto-extra
+
+# Google fonts
+RUN wget https://github.com/google/fonts/archive/main.tar.gz -O gf.tar.gz --no-check-certificate
+RUN tar -xf gf.tar.gz
+RUN mkdir -p /usr/share/fonts/truetype/google-fonts
+RUN find $PWD/fonts-main/ -name "*.ttf" -exec install -m644 {} /usr/share/fonts/truetype/google-fonts/ \; || return 1
+RUN rm -f gf.tar.gz
+RUN fc-cache -f && rm -rf /var/cache/*
+
+# PDF signer
+WORKDIR /var/lib
+RUN curl --location --output open-pdf-sign.jar https://github.com/open-pdf-sign/open-pdf-sign/releases/latest/download/open-pdf-sign.jar
+
+ENV JAVA_HOME="/usr/lib/jvm/java-21-openjdk"
+ENV PATH="$JAVA_HOME/bin:$PATH"
+
+WORKDIR /usr/src/archiver
 
 COPY package*.json ./
 
@@ -29,4 +39,4 @@ COPY . .
 
 RUN chmod +x ./bin/boot-app.sh
 
-CMD ["/usr/src/api/bin/boot-app.sh"]
+CMD ["/usr/src/archiver/bin/boot-app.sh"]
