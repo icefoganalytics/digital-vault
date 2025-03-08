@@ -48,3 +48,8 @@ export const DEFAULT_LOG_LEVEL = process.env.DEFAULT_LOG_LEVEL || "debug"
 
 export const BLOB_CONNECTIONSTRING = process.env.BLOB_CONNECTIONSTRING || ""
 export const BLOB_CONTAINER = process.env.BLOB_CONTAINER || ""
+
+export const PDF_SIGNER_JAR = process.env.PDF_SIGNER_JAR || ""
+export const TIMESTAMP_SERVER = process.env.TIMESTAMP_SERVER || ""
+export const SSL_FULL_CHAIN_PATH = process.env.SSL_FULL_CHAIN_PATH || ""
+export const SSL_CERT_KEY_PATH = process.env.SSL_CERT_KEY_PATH || ""
