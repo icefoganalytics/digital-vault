@@ -34,10 +34,12 @@ export class PDFConverterJob {
       const convertedPdfKey = `${folderKey}/${fileStore.makeKey()}`
 
       const fileAsPDF = await bufferToPdf(file)
+
       const pdfPath = "./tmp/input.pdf"
       const convertedAndSignedFile = "./tmp/output.pdf"
 
       writeFileSync(pdfPath, fileAsPDF)
+
       await signPDFWithPAdES(pdfPath, convertedAndSignedFile)
 
       const uploadResp = await fileStore.uploadFile(convertedPdfKey, convertedAndSignedFile)
