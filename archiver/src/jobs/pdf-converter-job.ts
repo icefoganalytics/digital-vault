@@ -35,8 +35,8 @@ export class PDFConverterJob {
 
       const fileAsPDF = await bufferToPdf(file)
 
-      const pdfPath = "./tmp/input.pdf"
-      const convertedAndSignedFile = "./tmp/output.pdf"
+      const pdfPath = "/tmp/input.pdf"
+      const convertedAndSignedFile = "/tmp/output.pdf"
 
       writeFileSync(pdfPath, fileAsPDF)
 
