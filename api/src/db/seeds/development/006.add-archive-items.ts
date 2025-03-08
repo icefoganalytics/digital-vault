@@ -2,7 +2,7 @@ import { Knex } from "knex"
 import { isNil } from "lodash"
 import { DateTime } from "luxon"
 
-import { ArchiveItem, ArchiveItemCategory, Category, Retention, Source } from "@/models"
+import { ArchiveItem, ArchiveItemCategory, Category, Source } from "@/models"
 import { ArchiveItemStatus, SecurityLevel } from "@/models/archive-item"
 
 import logger from "@/utils/logger"
