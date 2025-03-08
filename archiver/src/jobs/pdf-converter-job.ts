@@ -1,8 +1,13 @@
-import cache from "@/db/cache-client"
-import logger from "@/utils/logger"
-import { FileStorageService } from "@/services"
 import { isNil } from "lodash"
+import { writeFileSync } from "fs"
+
+import { FileStorageService } from "@/services"
 import { ArchiveItemFile } from "@/models"
+import cache from "@/db/cache-client"
+
+import { bufferToPdf } from "@/utils/buffer-to-pdf"
+import { signPDFWithPAdES } from "@/utils/pdf-signer"
+import logger from "@/utils/logger"
 
 export class PDFConverterJob {
   name = "pdf-converter"
@@ -28,27 +33,27 @@ export class PDFConverterJob {
       const folderKey = fileInfo.originalKey.substring(0, fileInfo.originalKey.indexOf("/"))
       const convertedPdfKey = `${folderKey}/${fileStore.makeKey()}`
 
-      console.log("DOWNLOADED FILE", file.length)
+      const fileAsPDF = await bufferToPdf(file)
+      const pdfPath = "./tmp/input.pdf"
+      const convertedAndSignedFile = "./tmp/output.pdf"
 
-      //TODO: This is where the magical conversion and signing happens
-      // the converted file should be called `convertedAndSignedFile`
-      // it can be saved to a local directory for processing if required.
+      writeFileSync(pdfPath, fileAsPDF)
+      await signPDFWithPAdES(pdfPath, convertedAndSignedFile)
 
-      // after the conversion is complete, upload the file to the file store, update the file record and delete the cache key
-      /* 
       const uploadResp = await fileStore.uploadFile(convertedPdfKey, convertedAndSignedFile)
 
       if (uploadResp.errorCode) {
         throw Error("File upload error")
       }
-      
-      fileRecord.pdfKey = convertedPdfKey
-      fileRecord.pdfFileName = `${fileRecord.originalFileName}_SIGNED.pdf`
-      fileRecord.pdfMimeType = "application/pdf"
-      fileRecord.pdfFileSize = convertedAndSignedFile.length
-      await fileRecord.update()
 
-      cache.deleteValue(key) */
+      await fileRecord.update({
+        pdfKey: convertedPdfKey,
+        pdfFileName: `${fileRecord.originalFileName}_SIGNED.pdf`,
+        pdfMimeType: "application/pdf",
+        pdfFileSize: convertedAndSignedFile.length,
+      })
+
+      cache.deleteValue(key)
     }
   }
 }
