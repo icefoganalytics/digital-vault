@@ -94,6 +94,7 @@ services:
 
   cache:
     image: bitnami/redis:7.2.4
+    user: root
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -115,6 +116,7 @@ services:
 
   mail:
     image: maildev/maildev
+    user: root
     ports:
       - "1080:1080" # Web UI
       - "1025:1025" # SMTP
@@ -122,12 +124,12 @@ services:
   # For easily generating large PlantUML diagrams
   # Not relevant to production environment.
   # Accessible at http://localhost:9999
-  plantuml:
-    image: plantuml/plantuml-server:jetty
-    ports:
-      - 9999:8080
-    environment:
-      PLANTUML_LIMIT_SIZE: 8192
+  # plantuml:
+  #   image: plantuml/plantuml-server:jetty
+  #   ports:
+  #     - 9999:8080
+  #   environment:
+  #     PLANTUML_LIMIT_SIZE: 8192
 
   archiver:
     build:
@@ -142,9 +144,11 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./archiver:/usr/src/api
+      - ./archiver:/usr/src/archiver
       - ./.gitignore:/usr/src/.gitignore
       - ./.prettierrc.yaml:/usr/src/.prettierrc.yaml
+      - ./archiver/certs/icefog.pem:/etc/ssl/private/icefog.pem:ro
+      - ./archiver/certs/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
 
 volumes:
   db_data:

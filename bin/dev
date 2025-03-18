@@ -99,6 +99,10 @@ class DevHelper
     run(*%w[api], *args, **kwargs)
   end
 
+  def archiver(*args, **kwargs)
+    run(*%w[archiver], *args, **kwargs)
+  end
+
   def npm(*args, **kwargs)
     run(*%w[api npm], *args, **kwargs)
   end
