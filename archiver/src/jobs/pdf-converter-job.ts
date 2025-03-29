@@ -1,5 +1,4 @@
 import { isNil } from "lodash"
-import { writeFileSync } from "fs"
 
 import { FileStorageService } from "@/services"
 import { ArchiveItemFile } from "@/models"
@@ -20,6 +19,8 @@ export class PDFConverterJob {
     const toConvert = await cache.getKeysByPattern(`CONVERT_`)
     const fileStore = new FileStorageService()
 
+    const archiveItems = new Map<number, { archiveItemId: number; fileCount: number }>()
+
     for (const key of toConvert) {
       const data = await cache.getValue(key)
 
@@ -35,14 +36,9 @@ export class PDFConverterJob {
 
       const fileAsPDF = await bufferToPdf(file)
 
-      const pdfPath = "/tmp/input.pdf"
-      const convertedAndSignedFile = "/tmp/output.pdf"
+      const signedPdf = await signPDFWithPAdES(fileAsPDF)
 
-      writeFileSync(pdfPath, fileAsPDF)
-
-      await signPDFWithPAdES(pdfPath, convertedAndSignedFile)
-
-      const uploadResp = await fileStore.uploadFile(convertedPdfKey, convertedAndSignedFile)
+      const uploadResp = await fileStore.uploadBuffer(convertedPdfKey, signedPdf)
 
       if (uploadResp.errorCode) {
         throw Error("File upload error")
@@ -52,10 +48,30 @@ export class PDFConverterJob {
         pdfKey: convertedPdfKey,
         pdfFileName: `${fileRecord.originalFileName}_SIGNED.pdf`,
         pdfMimeType: "application/pdf",
-        pdfFileSize: convertedAndSignedFile.length,
+        pdfFileSize: signedPdf.length,
       })
 
       cache.deleteValue(key)
+
+      const existingEntry = archiveItems.get(fileRecord.archiveItemId)
+      if (existingEntry) {
+        archiveItems.set(fileRecord.archiveItemId, {
+          archiveItemId: fileRecord.archiveItemId,
+          fileCount: existingEntry.fileCount + 1,
+        })
+      } else {
+        archiveItems.set(fileRecord.archiveItemId, {
+          archiveItemId: fileRecord.archiveItemId,
+          fileCount: 1,
+        })
+      }
     }
+
+    archiveItems.forEach((data, archiveItemId) => {
+      cache.setValueNoExpire(
+        `PENDING_FILESTORE_UPLOAD_ARCHIVE_ITEM_ID_${archiveItemId}`,
+        JSON.stringify(data)
+      )
+    })
   }
 }
