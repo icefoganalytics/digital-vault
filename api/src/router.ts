@@ -24,8 +24,9 @@ import {
   CategoriesController,
   CurrentUserController,
   DecisionsController,
-  IntegrationController,
+  // IntegrationController,
   RetentionsController,
+  Sources,
   SourcesController,
   UsersController,
 } from "@/controllers"
@@ -42,7 +43,7 @@ router.route("/_status").get((_req: Request, res: Response) => {
 
 router.use("/migrate", migrator.migrationRouter)
 
-router.route("/api/integrations/:sourceId").post(IntegrationController.create)
+// router.route("/api/integrations/:sourceId").post(IntegrationController.create)
 
 // api routes
 router.use("/api", jwtMiddleware, ensureAndAuthorizeCurrentUser)
@@ -62,6 +63,16 @@ router
   .get(SourcesController.show)
   .patch(SourcesController.update)
   .delete(SourcesController.destroy)
+
+router
+  .route("/api/sources/:sourceId/submissions")
+  .get(Sources.SubmissionsController.index)
+  .post(Sources.SubmissionsController.create)
+router
+  .route("/api/sources/:sourceId/submissions/:submissionId")
+  .get(Sources.SubmissionsController.show)
+  .patch(Sources.SubmissionsController.update)
+  .delete(Sources.SubmissionsController.destroy)
 
 router.route("/api/retentions").get(RetentionsController.index).post(RetentionsController.create)
 router

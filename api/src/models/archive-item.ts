@@ -19,12 +19,12 @@ import {
 } from "@sequelize/core/decorators-legacy"
 import { isEmpty, isNil } from "lodash"
 
-import BaseModel from "@/models/base-model"
+import ArchiveItemCategory from "@/models/archive-item-category"
 import ArchiveItemFile from "@/models/archive-item-file"
-import Category from "./category"
-import ArchiveItemCategory from "./archive-item-category"
-import User from "./user"
-import Source from "./source";
+import BaseModel from "@/models/base-model"
+import Category from "@/models/category"
+import Source from "@/models/source"
+import User from "@/models/user"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum SecurityLevel {

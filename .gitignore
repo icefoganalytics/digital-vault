@@ -115,3 +115,6 @@ db/data
 note.md
 now.md
 now.sql
+
+# Claude Code local settings
+.claude/settings.local.json

@@ -1,53 +1,57 @@
 import db from "@/db/db-client"
 
 // Models
-import User from "@/models/user"
-import UserPermission from "@/models/user-permission"
-import Source from "@/models/source"
-import Retention from "@/models/retention"
-import Category from "@/models/category"
 import ArchiveItem from "@/models/archive-item"
 import ArchiveItemAudit from "./archive-item-audit"
 import ArchiveItemCategory from "@/models/archive-item-category"
 import ArchiveItemFile from "@/models/archive-item-file"
+import Category from "@/models/category"
+import Retention from "@/models/retention"
+import Source from "@/models/source"
 import SourceCategory from "@/models/source-category"
+import Submission from "@/models/submission"
+import User from "@/models/user"
+import UserPermission from "@/models/user-permission"
 
 db.addModels([
-  User,
-  UserPermission,
   ArchiveItem,
-  Source,
-  Retention,
-  Category,
   ArchiveItemAudit,
   ArchiveItemCategory,
   ArchiveItemFile,
+  Category,
+  Retention,
+  Source,
   SourceCategory,
+  Submission,
+  User,
+  UserPermission,
 ])
 
 // Lazy load scopes
+ArchiveItem.establishScopes()
+ArchiveItemAudit.establishScopes()
+ArchiveItemCategory.establishScopes()
+ArchiveItemFile.establishScopes()
+Category.establishScopes()
+Retention.establishScopes()
+Source.establishScopes()
+SourceCategory.establishScopes()
+Submission.establishScopes()
 User.establishScopes()
 UserPermission.establishScopes()
-ArchiveItem.establishScopes()
-Source.establishScopes()
-Retention.establishScopes()
-Category.establishScopes()
-ArchiveItemCategory.establishScopes()
-ArchiveItemAudit.establishScopes()
-ArchiveItemFile.establishScopes()
-SourceCategory.establishScopes()
 
 export {
+  ArchiveItem,
+  ArchiveItemAudit,
+  ArchiveItemCategory,
+  ArchiveItemFile,
+  Category,
+  Retention,
+  Source,
+  SourceCategory,
+  Submission,
   User,
   UserPermission,
-  Source,
-  ArchiveItem,
-  Retention,
-  Category,
-  ArchiveItemCategory,
-  ArchiveItemAudit,
-  ArchiveItemFile,
-  SourceCategory,
 }
 
 // Special db instance will all models loaded

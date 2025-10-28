@@ -34,6 +34,7 @@ services:
     environment:
       <<: *default-environment
     tty: true # allows attaching debugger, equivalent of docker exec -t
+    init: true
     # stdin_open: true # equivalent of docker exec -i
     ports:
       - "3000:3000"
@@ -140,6 +141,7 @@ services:
     environment:
       <<: *default-environment
     tty: true # allows attaching debugger, equivalent of docker exec -t
+    init: true
     # stdin_open: true # equivalent of docker exec -i
     ports:
       - "5000:5000"

@@ -17,10 +17,10 @@ import {
   PrimaryKey,
 } from "@sequelize/core/decorators-legacy"
 
+import ArchiveItem from "@/models/archive-item"
+import ArchiveItemCategory from "@/models/archive-item-category"
 import BaseModel from "@/models/base-model"
-import Retention from "./retention"
-import ArchiveItem from "./archive-item"
-import ArchiveItemCategory from "./archive-item-category"
+import Retention from "@/models/retention"
 
 export class Category extends BaseModel<
   InferAttributes<Category>,
