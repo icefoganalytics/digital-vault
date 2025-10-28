@@ -1,5 +1,21 @@
 // Bundled exports
-export * as Users from "./users"
-export * as ArchiveItems from "./archive-items"
-export * as Source from "./sources"
-export * as Retention from "./retentions"
+import * as ArchiveItems from "./archive-items"
+import * as Retention from "./retentions"
+import * as Source from "./sources"
+import * as Users from "./users"
+
+export {
+  // avoid prettier wrap
+  ArchiveItems,
+  Retention,
+  Source,
+  Users,
+}
+
+export default {
+  // avoid prettier wrap
+  ArchiveItems,
+  Retention,
+  Source,
+  Users,
+}
