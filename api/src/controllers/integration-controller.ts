@@ -1,5 +1,5 @@
 import logger from "@/utils/logger"
-import { isArray, isNil, uniqBy } from "lodash"
+import { isNil, uniqBy } from "lodash"
 import { ArchiveItem, ArchiveItemAudit, Category, Source, User, UserPermission } from "@/models"
 import { IntegrationsPolicy } from "@/policies"
 import BaseController from "@/controllers/base-controller"
@@ -70,7 +70,6 @@ export class IntegrationController extends BaseController<ArchiveItem> {
       let expireAction = ""
 
       for (const retention of retentionOptions) {
-
         console.log(retention)
 
         if (retention.retentionDate) {
