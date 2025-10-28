@@ -7,10 +7,10 @@ import { isUndefined } from "lodash"
 
 export class ArchiveItemAuditsPolicy extends PolicyFactory(ArchiveItemAudit) {
   show(): boolean {
-    if (this.users.some((user) => user.id === this.user?.id)) {
+    if (this.users.some((user) => user.id === this.user.id)) {
       return true
     }
-    if (this.user?.isSystemAdmin) return true
+    if (this.user.isSystemAdmin) return true
 
     return false
   }
