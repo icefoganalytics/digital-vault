@@ -9,6 +9,7 @@ import Category from "@/models/category"
 import Retention from "@/models/retention"
 import Source from "@/models/source"
 import SourceCategory from "@/models/source-category"
+import Submission from "@/models/submission"
 import User from "@/models/user"
 import UserPermission from "@/models/user-permission"
 
@@ -21,6 +22,7 @@ db.addModels([
   Retention,
   Source,
   SourceCategory,
+  Submission,
   User,
   UserPermission,
 ])
@@ -34,6 +36,7 @@ Category.establishScopes()
 Retention.establishScopes()
 Source.establishScopes()
 SourceCategory.establishScopes()
+Submission.establishScopes()
 User.establishScopes()
 UserPermission.establishScopes()
 
@@ -46,6 +49,7 @@ export {
   Retention,
   Source,
   SourceCategory,
+  Submission,
   User,
   UserPermission,
 }
