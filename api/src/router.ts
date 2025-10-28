@@ -26,6 +26,7 @@ import {
   DecisionsController,
   // IntegrationController,
   RetentionsController,
+  Sources,
   SourcesController,
   UsersController,
 } from "@/controllers"
@@ -62,6 +63,16 @@ router
   .get(SourcesController.show)
   .patch(SourcesController.update)
   .delete(SourcesController.destroy)
+
+router
+  .route("/api/sources/:sourceId/submissions")
+  .get(Sources.SubmissionsController.index)
+  .post(Sources.SubmissionsController.create)
+router
+  .route("/api/sources/:sourceId/submissions/:submissionId")
+  .get(Sources.SubmissionsController.show)
+  .patch(Sources.SubmissionsController.update)
+  .delete(Sources.SubmissionsController.destroy)
 
 router.route("/api/retentions").get(RetentionsController.index).post(RetentionsController.create)
 router

@@ -9,3 +9,6 @@ export { DecisionsController } from "./decisions-controller"
 export { RetentionsController } from "./retentions-controller"
 export { SourcesController } from "./sources-controller"
 export { UsersController } from "./users-controller"
+
+// Bundled exports
+export * as Sources from "./sources"

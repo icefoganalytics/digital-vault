@@ -5,6 +5,7 @@ export * from "./file-storage-service"
 import * as Categories from "./categories"
 import * as Retentions from "./retentions"
 import * as Sources from "./sources"
+import * as Submissions from "./submissions"
 import * as Users from "./users"
 
 export {
@@ -12,6 +13,7 @@ export {
   Categories,
   Retentions,
   Sources,
+  Submissions,
   Users,
 }
 
@@ -19,5 +21,6 @@ export default {
   Categories,
   Retentions,
   Sources,
+  Submissions,
   Users,
 }
