@@ -19,7 +19,7 @@ import {
 import { isNil } from "lodash"
 
 import BaseModel from "@/models/base-model"
-import UserPermission from "./user-permission"
+import UserPermission from "@/models/user-permission"
 
 /** Keep in sync with web/src/api/users-api.ts */
 export enum UserRoles {

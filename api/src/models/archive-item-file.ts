@@ -15,8 +15,8 @@ import {
   PrimaryKey,
 } from "@sequelize/core/decorators-legacy"
 
+import ArchiveItem from "@/models/archive-item"
 import BaseModel from "@/models/base-model"
-import ArchiveItem from "./archive-item"
 
 export class ArchiveItemFile extends BaseModel<
   InferAttributes<ArchiveItemFile>,
