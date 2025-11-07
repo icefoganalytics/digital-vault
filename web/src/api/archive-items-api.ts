@@ -14,8 +14,8 @@ export enum SecurityLevel {
 export enum ArchiveItemStatus {
   ACCEPTED = "Accepted",
   REVIEWED = "Reviewed",
-  LOCKED = "Locked",
   HIDDEN = "Hidden",
+  "EXPIRING SOON" = "Expiring Soon",
 }
 
 export type ArchiveItem = {
@@ -76,7 +76,7 @@ export type ArchiveItemCreate = {
 }
 
 export type ArchiveItemWhereOptions = {
-  expiringSoon? : boolean | null
+  expiringSoon?: boolean | null
   status?: string
 }
 
